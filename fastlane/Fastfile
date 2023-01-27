@@ -19,6 +19,7 @@ platform :ios do
   desc "Runs unit tests"
   lane :run_unit_tests do
     run_tests(
+      workspace: "Networking-Example.xcworkspace",
       scheme: "Networking-Example",
       skip_build: true
     )

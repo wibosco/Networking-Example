@@ -210,9 +210,10 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-darwin-22
 
 DEPENDENCIES
   fastlane (= 2.211.0)
 
 BUNDLED WITH
-   2.2.26
+   2.4.5
