@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import Networking
 
 struct ContentView: View {
+    @StateObject var viewModel = ViewModel(galleryService: GalleryService())
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -16,7 +19,20 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .onAppear {
+            viewModel.search(term: "cats")
+        }
     }
+
+}
+
+struct SearchResults: Codable {
+    let data: [SearchResult]
+}
+
+struct SearchResult: Codable {
+    let id: String
+    let title: String
 }
 
 struct ContentView_Previews: PreviewProvider {
