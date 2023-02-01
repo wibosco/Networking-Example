@@ -7,14 +7,14 @@
 
 import Foundation
 
-public enum NetworkingError: Error {
+public enum HTTPNetworkingError: Error {
     case network(underlyingError: Error)
     case response(response: URLResponse)
     case decoding(underlyingError: Error)
     case encoding(underlyingError: Error)
 }
 
-extension NetworkingError: LocalizedError {
+extension HTTPNetworkingError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .network(let underlyingError):

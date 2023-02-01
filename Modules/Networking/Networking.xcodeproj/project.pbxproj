@@ -11,7 +11,7 @@
 		3DD896322983FCF300414419 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD896312983FCF300414419 /* NetworkingTests.swift */; };
 		3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */; };
 		437D5086298943D900C906D4 /* HTTPNetworkingConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */; };
-		437D50882989462B00C906D4 /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50872989462B00C906D4 /* NetworkingError.swift */; };
+		437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50872989462B00C906D4 /* HTTPNetworkingError.swift */; };
 		437D508A2989576700C906D4 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50892989576700C906D4 /* HTTPMethod.swift */; };
 		437D508C2989578300C906D4 /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D508B2989578300C906D4 /* HTTPHeader.swift */; };
 /* End PBXBuildFile section */
@@ -32,7 +32,7 @@
 		3DD896312983FCF300414419 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 		3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingClient.swift; sourceTree = "<group>"; };
 		437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingConfiguration.swift; sourceTree = "<group>"; };
-		437D50872989462B00C906D4 /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
+		437D50872989462B00C906D4 /* HTTPNetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingError.swift; sourceTree = "<group>"; };
 		437D50892989576700C906D4 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		437D508B2989578300C906D4 /* HTTPHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,7 +81,7 @@
 				437D50892989576700C906D4 /* HTTPMethod.swift */,
 				3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */,
 				437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */,
-				437D50872989462B00C906D4 /* NetworkingError.swift */,
+				437D50872989462B00C906D4 /* HTTPNetworkingError.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -206,7 +206,7 @@
 				437D508A2989576700C906D4 /* HTTPMethod.swift in Sources */,
 				437D5086298943D900C906D4 /* HTTPNetworkingConfiguration.swift in Sources */,
 				437D508C2989578300C906D4 /* HTTPHeader.swift in Sources */,
-				437D50882989462B00C906D4 /* NetworkingError.swift in Sources */,
+				437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */,
 				3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

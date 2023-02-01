@@ -9,8 +9,7 @@ import SwiftUI
 import Networking
 
 struct ContentView: View {
-    @State private var searchText = ""
-    @StateObject var viewModel = ViewModel(galleryService: GalleryService())
+    @StateObject var viewModel = CatsDataProvider(service: ImagesService())
     
     let columns = [
         GridItem(.flexible()),
@@ -21,15 +20,16 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.searching {
-                    ProgressView("Searching for \"\(searchText)\"")
+                if viewModel.retrievingCats {
+                    ProgressView("Loading Cats...")
                 } else {
                     GeometryReader { geometryReader in
                         let width = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(viewModel.results, id: \.id) { _ in
-                                    Color.orange.frame(width: width, height: width)
+                                ForEach(viewModel.viewModels, id: \.id) { viewModel in
+                                    CatImageCell(viewModel: viewModel)
+                                        .frame(width: width, height: width)
                                 }
                             }
                         }
@@ -37,28 +37,36 @@ struct ContentView: View {
                 }
             }
             .padding()
-            .navigationTitle("Search")
+            .navigationTitle("Cats")
         }
-        
-        .searchable(text: $searchText, prompt: "Search Imgur for...")
-        .autocorrectionDisabled(true)
-        .autocapitalization(.none)
-        .onSubmit(of: .search) {
-            Task {
-                await viewModel.search(for: searchText)
-            }
+        .task {
+            await viewModel.retrieveCatImages()
         }
-        
     }
 }
 
-struct SearchResults: Codable {
-    let data: [SearchResult]
-}
-
-struct SearchResult: Codable {
-    let id: String
-    let title: String
+struct CatImageCell: View {
+    let viewModel: CatImageViewModel
+    
+    var body: some View {
+        VStack {
+            AsyncImage(url: viewModel.imageURL) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .clipped()
+                case .failure:
+                    Image(systemName: "photo")
+                @unknown default:
+                    Image(systemName: "photo")
+                }
+            }
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

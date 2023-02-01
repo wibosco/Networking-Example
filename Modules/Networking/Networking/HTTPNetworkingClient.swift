@@ -59,10 +59,10 @@ public final class HTTPNetworkingClient {
                                                      decoder: decoder)
             
             return decoded
-        } catch let error as NetworkingError {
+        } catch let error as HTTPNetworkingError {
             throw error
         } catch let underlyingError {
-            let error = NetworkingError.network(underlyingError: underlyingError)
+            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
             
             throw error
         }
@@ -107,7 +107,7 @@ public final class HTTPNetworkingClient {
                                               decoder: ResponseDecoder) throws -> T {
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
-            let error = NetworkingError.response(response: response)
+            let error = HTTPNetworkingError.response(response: response)
             
             throw error
         }
@@ -117,7 +117,7 @@ public final class HTTPNetworkingClient {
             
             return decoded
         } catch let decodeError {
-            let error = NetworkingError.decoding(underlyingError: decodeError)
+            let error = HTTPNetworkingError.decoding(underlyingError: decodeError)
             
             throw error
         }
