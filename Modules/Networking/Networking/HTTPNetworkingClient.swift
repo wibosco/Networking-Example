@@ -8,25 +8,14 @@
 import Foundation
 
 public protocol NetworkingClientType {
-    func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, completion: @escaping ((Result<T, Error>) -> ()))
-    func put<T: Decodable, B: Encodable>(path: String, body: B, completion: @escaping ((Result<T, Error>) -> ()))
+    func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
 }
-
-public protocol URLSessionDataTaskType {
-    func resume()
-}
-
-extension URLSessionDataTask: URLSessionDataTaskType { }
 
 public protocol URLSessionType {
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskType
+    func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
-extension URLSession: URLSessionType {
-    public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskType {
-        return dataTask(with: request, completionHandler: completionHandler) as URLSessionDataTask
-    }
-}
+extension URLSession: URLSessionType { }
 
 public protocol ResponseDecoder {
     func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T
@@ -41,41 +30,46 @@ public final class HTTPNetworkingClient {
     // MARK: - Init
     
     public init(urlSession: URLSessionType,
-         config: HTTPNetworkingConfigurationType) {
+                config: HTTPNetworkingConfigurationType) {
         self.urlSession = urlSession
         self.config = config
     }
     
     // MARK: - Request
     
-    private func makeDataRequest<T: Decodable, D: ResponseDecoder>(path: String,
-                                                                   queryItems: [URLQueryItem]? = nil,
-                                                                   body: Data? = nil,
-                                                                   httpMethod: HTTPMethod,
-                                                                   headers: [HTTPHeader]? = nil,
-                                                                   decoder: D,
-                                                                   completion: @escaping ((Result<T, Error>) -> ())) {
-        let url = buildURL(forPath: path, queryItems: queryItems)
+    private func makeDataRequest<T: Decodable>(path: String,
+                                               queryItems: [URLQueryItem]?,
+                                               body: Data?,
+                                               httpMethod: HTTPMethod,
+                                               headers: [HTTPHeader]?,
+                                               decoder: ResponseDecoder) async throws -> T {
+        let url = buildURL(forPath: path,
+                           queryItems: queryItems)
+        
         let urlRequest = buildRequest(forURL: url,
                                       httpMethod: httpMethod,
                                       body: body,
                                       headers: headers)
-    
-        let task = urlSession.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            guard let self = self else {
-                return
-            }
+        
+        do {
+            let (data, response) = try await urlSession.data(for: urlRequest)
             
-            let result: Result<T, Error> = self.decodeResponse(fromData: data,
-                                                               response: response,
-                                                               error: error,
-                                                               decoder: decoder)
+            let decoded: T = try self.decodeResponse(fromData: data,
+                                                     response: response,
+                                                     decoder: decoder)
             
-            completion(result)
+            return decoded
+        } catch let error as NetworkingError {
+            throw error
+        } catch let underlyingError {
+            let error = NetworkingError.network(underlyingError: underlyingError)
+            
+            throw error
         }
-        task.resume()
     }
-
+    
+    // MARK: - URL
+    
     private func buildURL(forPath path: String,
                           queryItems: [URLQueryItem]? = nil) -> URL {
         var components = URLComponents()
@@ -108,54 +102,40 @@ public final class HTTPNetworkingClient {
         return urlRequest
     }
     
-    private func decodeResponse<T: Decodable, D: ResponseDecoder>(fromData data: Data?,
-                                                                  response: URLResponse?,
-                                                                  error: Error?,
-                                                                  decoder: D) -> Result<T, Error> {
-        guard let data = data,
-              let httpResponse = response as? HTTPURLResponse,
+    private func decodeResponse<T: Decodable>(fromData data: Data,
+                                              response: URLResponse,
+                                              decoder: ResponseDecoder) throws -> T {
+        guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
-            let retrievalError = NetworkingError.network(underlayingError: error, response: response)
+            let error = NetworkingError.response(response: response)
             
-            return .failure(retrievalError)
+            throw error
         }
         
         do {
             let decoded = try decoder.decode(T.self, from: data)
             
-            return .success(decoded)
+            return decoded
         } catch let decodeError {
-            let error = NetworkingError.decoding(underlayingError: decodeError)
+            let error = NetworkingError.decoding(underlyingError: decodeError)
             
-            return .failure(error)
-        }
-    }
-    
-    private func encodeBody<T: Encodable>(fromBody body: T) -> Result<Data, Error> {
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(body)
-            
-            return .success(data)
-        } catch let encodeError {
-            let error = NetworkingError.encoding(underlayingError: encodeError)
-            
-            return .failure(error)
+            throw error
         }
     }
     
     // MARK: - GET
     
-    public func get<T: Decodable, D: ResponseDecoder>(path: String,
-                                                      queryItems: [URLQueryItem]?,
-                                                      headers: [HTTPHeader]? = nil,
-                                                      decoder: D,
-                                                      completion: @escaping ((Result<T, Error>) -> ())) {
-        makeDataRequest(path: path,
-                        queryItems: queryItems,
-                        httpMethod: .GET,
-                        headers: headers,
-                        decoder: decoder,
-                        completion: completion)
+    public func get<T: Decodable>(path: String,
+                                  queryItems: [URLQueryItem]?,
+                                  headers: [HTTPHeader]? = nil,
+                                  decoder: ResponseDecoder) async throws -> T {
+        let result: T = try await makeDataRequest(path: path,
+                                                  queryItems: queryItems,
+                                                  body: nil,
+                                                  httpMethod: .GET,
+                                                  headers: headers,
+                                                  decoder: decoder)
+        
+        return result
     }
 }

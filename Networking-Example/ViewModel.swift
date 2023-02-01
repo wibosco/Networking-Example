@@ -9,6 +9,7 @@ import Foundation
 
 class ViewModel: ObservableObject {
     @Published var results: [SearchResult] = []
+    @Published var searching: Bool = false
     
     private let galleryService: GalleryService
     
@@ -20,9 +21,10 @@ class ViewModel: ObservableObject {
     
     // MARK: - Search
     
-    func search(term: String) {
-        galleryService.search(term: term) { searchResult in
-            self.results = searchResult?.data ?? []
-        }
+    @MainActor
+    func search(for searchText: String) async {
+        searching = true
+        self.results = await galleryService.search(for: searchText).data
+        searching = false
     }
 }

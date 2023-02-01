@@ -8,41 +8,35 @@
 import Foundation
 
 public enum NetworkingError: Error {
-    case network(underlayingError: Error?, response: URLResponse?)
-    case decoding(underlayingError: Error?)
-    case encoding(underlayingError: Error?)
+    case network(underlyingError: Error)
+    case response(response: URLResponse)
+    case decoding(underlyingError: Error)
+    case encoding(underlyingError: Error)
 }
 
 extension NetworkingError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .network(let underlyingError, let response):
+        case .network(let underlyingError):
+            let localizedDescription = "Unable to retrieve content  with underlaying error \(underlyingError.localizedDescription)"
+            
+            return localizedDescription
+        case .response(let response):
             var localizedDescription = "Unable to retrieve content"
-            if let response = response {
-                if let url = response.url {
-                    localizedDescription += " from \(url)"
-                }
-                if let httpResponse = response as? HTTPURLResponse {
-                    localizedDescription += " received status code \(httpResponse.statusCode)"
-                }
+            if let url = response.url {
+                localizedDescription += " from \(url)"
             }
-            if let underlyingError = underlyingError {
-                localizedDescription += " with underlaying error \(underlyingError.localizedDescription)"
+            if let httpResponse = response as? HTTPURLResponse {
+                localizedDescription += " received status code \(httpResponse.statusCode)"
             }
             
             return localizedDescription
         case .decoding(let underlyingError):
-            var localizedDescription = "Unable to decode content"
-            if let underlyingError = underlyingError {
-                localizedDescription += " with underlaying error \(underlyingError.localizedDescription)"
-            }
+            let localizedDescription = "Unable to decode content with underlaying error \(underlyingError.localizedDescription)"
             
             return localizedDescription
         case .encoding(let underlyingError):
-            var localizedDescription = "Unable to encode content"
-            if let underlyingError = underlyingError {
-                localizedDescription += " with underlaying error \(underlyingError.localizedDescription)"
-            }
+            let localizedDescription = "Unable to encode content with underlaying error \(underlyingError.localizedDescription)"
             
             return localizedDescription
         }
