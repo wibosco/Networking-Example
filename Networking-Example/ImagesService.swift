@@ -40,8 +40,8 @@ class ImagesService {
                                                                        decoder: JSONDecoder())
             
             return cats
-        } catch {
-            fatalError()
+        } catch let error {
+            fatalError(error.localizedDescription)
             //handle
         }
     }

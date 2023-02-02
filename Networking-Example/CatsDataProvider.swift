@@ -19,16 +19,26 @@ class CatsDataProvider: ObservableObject {
         self.service = service
     }
     
-    // MARK: - Search
+    // MARK: - Retrieval
     
     @MainActor
-    func retrieveCatImages() async {
+    func retrieveCats() async {
         retrievingCats = true
         
         let cats = await service.retrieveCatImages()
-        self.viewModels = cats.map { CatImageViewModel(id: $0.id, imageURL: $0.url) }
+        self.viewModels = buildViewModels(from: cats)
         
         retrievingCats = false
+    }
+    
+    @MainActor
+    func refreshCats() async {
+        let cats = await service.retrieveCatImages()
+        self.viewModels = buildViewModels(from: cats)
+    }
+    
+    private func buildViewModels(from cats: [SearchResult]) -> [CatImageViewModel] {
+        return cats.map { CatImageViewModel(id: $0.id, imageURL: $0.url) }
     }
 }
 

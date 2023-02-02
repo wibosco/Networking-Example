@@ -9,7 +9,7 @@ import SwiftUI
 import Networking
 
 struct ContentView: View {
-    @StateObject var viewModel = CatsDataProvider(service: ImagesService())
+    @StateObject var dataProvider = CatsDataProvider(service: ImagesService())
     
     let columns = [
         GridItem(.flexible()),
@@ -20,14 +20,14 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.retrievingCats {
+                if dataProvider.retrievingCats {
                     ProgressView("Loading Cats...")
                 } else {
                     GeometryReader { geometryReader in
                         let width = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(viewModel.viewModels, id: \.id) { viewModel in
+                                ForEach(dataProvider.viewModels, id: \.id) { viewModel in
                                     CatImageCell(viewModel: viewModel)
                                         .frame(width: width, height: width)
                                 }
@@ -40,7 +40,10 @@ struct ContentView: View {
             .navigationTitle("Cats")
         }
         .task {
-            await viewModel.retrieveCatImages()
+            await dataProvider.retrieveCats()
+        }
+        .refreshable {
+            await dataProvider.refreshCats()
         }
     }
 }
