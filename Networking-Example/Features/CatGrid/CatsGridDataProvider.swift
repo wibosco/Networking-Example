@@ -8,11 +8,11 @@
 import Foundation
 import APIService
 
-class CatsDataProvider: ObservableObject {
+class CatsGridDataProvider: ObservableObject {
     @Published var viewModels: [CatImageViewModel] = []
     @Published var retrievingCats: Bool = false
     
-    private let service: ImagesServiceType
+    let service: ImagesServiceType
     
     // MARK: - Init
     

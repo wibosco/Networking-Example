@@ -16,9 +16,11 @@
 		433C2F25298BDD6D009C7B10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 433C2F22298BDD6D009C7B10 /* Assets.xcassets */; };
 		433C2F26298BDD6D009C7B10 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 433C2F24298BDD6D009C7B10 /* Preview Assets.xcassets */; };
 		435D13A3298C1C15004A9946 /* CatsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D13A1298C1C15004A9946 /* CatsGridView.swift */; };
-		435D13A4298C1C15004A9946 /* CatsDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D13A2298C1C15004A9946 /* CatsDataProvider.swift */; };
+		435D13A4298C1C15004A9946 /* CatsGridDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D13A2298C1C15004A9946 /* CatsGridDataProvider.swift */; };
 		437D509229895FC700C906D4 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437D509129895FC700C906D4 /* Networking.framework */; };
 		437D509329895FC700C906D4 /* Networking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 437D509129895FC700C906D4 /* Networking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43F4EA00298D58F200E72F4C /* CatDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4E9FF298D58F200E72F4C /* CatDetailsView.swift */; };
+		43F4EA02298D595600E72F4C /* CatDetailsDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4EA01298D595600E72F4C /* CatDetailsDataProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +67,10 @@
 		433C2F22298BDD6D009C7B10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		433C2F24298BDD6D009C7B10 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		435D13A1298C1C15004A9946 /* CatsGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatsGridView.swift; sourceTree = "<group>"; };
-		435D13A2298C1C15004A9946 /* CatsDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatsDataProvider.swift; sourceTree = "<group>"; };
+		435D13A2298C1C15004A9946 /* CatsGridDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatsGridDataProvider.swift; sourceTree = "<group>"; };
 		437D509129895FC700C906D4 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43F4E9FF298D58F200E72F4C /* CatDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsView.swift; sourceTree = "<group>"; };
+		43F4EA01298D595600E72F4C /* CatDetailsDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsDataProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +159,7 @@
 		433C2F1B298BDC9F009C7B10 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				43F4E9FE298D58D500E72F4C /* CatDetail */,
 				435D13A0298C1C15004A9946 /* CatGrid */,
 			);
 			path = Features;
@@ -181,7 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				435D13A1298C1C15004A9946 /* CatsGridView.swift */,
-				435D13A2298C1C15004A9946 /* CatsDataProvider.swift */,
+				435D13A2298C1C15004A9946 /* CatsGridDataProvider.swift */,
 			);
 			path = CatGrid;
 			sourceTree = "<group>";
@@ -193,6 +198,15 @@
 				437D509129895FC700C906D4 /* Networking.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		43F4E9FE298D58D500E72F4C /* CatDetail */ = {
+			isa = PBXGroup;
+			children = (
+				43F4E9FF298D58F200E72F4C /* CatDetailsView.swift */,
+				43F4EA01298D595600E72F4C /* CatDetailsDataProvider.swift */,
+			);
+			path = CatDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,7 +340,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				435D13A4298C1C15004A9946 /* CatsDataProvider.swift in Sources */,
+				43F4EA02298D595600E72F4C /* CatDetailsDataProvider.swift in Sources */,
+				43F4EA00298D58F200E72F4C /* CatDetailsView.swift in Sources */,
+				435D13A4298C1C15004A9946 /* CatsGridDataProvider.swift in Sources */,
 				433C2F1E298BDC9F009C7B10 /* Networking_ExampleApp.swift in Sources */,
 				435D13A3298C1C15004A9946 /* CatsGridView.swift in Sources */,
 			);

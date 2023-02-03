@@ -9,7 +9,7 @@ import SwiftUI
 import APIService
 
 struct CatsGridView: View {
-    @StateObject var dataProvider: CatsDataProvider
+    @StateObject var dataProvider: CatsGridDataProvider
     
     // MARK: - View
     
@@ -26,12 +26,18 @@ struct CatsGridView: View {
                     ProgressView("Loading Cats...")
                 } else {
                     GeometryReader { geometryReader in
-                        let width = geometryReader.size.width / CGFloat(columns.count)
+                        let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
                                 ForEach(dataProvider.viewModels, id: \.id) { viewModel in
-                                    CatImageCell(viewModel: viewModel)
-                                        .frame(width: width, height: width)
+                                    NavigationLink {
+                                        let catDetailsDataProvider = CatDetailsDataProvider(id: viewModel.id,
+                                                                                            service: dataProvider.service)
+                                        CatDetailsView(dataProvider: catDetailsDataProvider)
+                                    } label: {
+                                        CatImageCell(viewModel: viewModel)
+                                            .frame(width: sideLength, height: sideLength)
+                                    }
                                 }
                             }
                         }
@@ -39,7 +45,7 @@ struct CatsGridView: View {
                 }
             }
             .padding()
-            .navigationTitle("Cats")
+            .navigationTitle("Explore")
         }
         .task {
             await dataProvider.retrieveCats()

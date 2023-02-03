@@ -9,7 +9,7 @@ import Foundation
 
 public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
-    func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
+    func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws -> T
 }
 
 public protocol URLSessionType {
@@ -142,8 +142,7 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     
     public func getJSON<T: Decodable>(path: String,
                                       queryItems: [URLQueryItem]?,
-                                      headers: [HTTPHeader]?,
-                                      decoder: ResponseDecoder) async throws -> T {
+                                      headers: [HTTPHeader]?) async throws -> T {
         
         var headers = headers ?? []
         headers += HTTPHeader.jsonHeaders()
@@ -151,6 +150,6 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         return try await get(path: path,
                              queryItems: queryItems,
                              headers: headers,
-                             decoder: decoder)
+                             decoder: JSONDecoder())
     }
 }

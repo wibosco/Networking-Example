@@ -26,7 +26,7 @@ struct Networking_ExampleApp: App {
             
             let imageService = ImagesService(networkingClient: networkingClient)
             
-            let dataProvider = CatsDataProvider(service: imageService)
+            let dataProvider = CatsGridDataProvider(service: imageService)
             CatsGridView(dataProvider: dataProvider)
         }
     }
