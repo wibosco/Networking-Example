@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Modules/APIService/APIService.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Networking-Example.xcodeproj">
    </FileRef>
    <FileRef

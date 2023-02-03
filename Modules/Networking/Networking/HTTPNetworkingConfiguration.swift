@@ -8,20 +8,23 @@
 import Foundation
 
 public protocol HTTPNetworkingConfigurationType {
-    //TODO: Determine if these are the correct names?
     var scheme: String { get }
     var host: String { get }
+    var defaultHeaders: [HTTPHeader] { get }
 }
 
 public struct HTTPNetworkingConfiguration: HTTPNetworkingConfigurationType {
     public let scheme: String
     public let host: String
+    public let defaultHeaders: [HTTPHeader]
     
     // MARK: - Init
     
     public init(scheme: String,
-                host: String) {
+                host: String,
+                defaultHeaders: [HTTPHeader]) {
         self.scheme = scheme
         self.host = host
+        self.defaultHeaders = defaultHeaders
     }
 }

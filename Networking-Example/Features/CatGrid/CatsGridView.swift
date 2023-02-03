@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
-import Networking
+import APIService
 
-struct ContentView: View {
-    @StateObject var dataProvider = CatsDataProvider(service: ImagesService())
+struct CatsGridView: View {
+    @StateObject var dataProvider: CatsDataProvider
+    
+    // MARK: - View
     
     let columns = [
         GridItem(.flexible()),
@@ -72,8 +74,8 @@ struct CatImageCell: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

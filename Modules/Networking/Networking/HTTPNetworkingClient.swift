@@ -7,8 +7,9 @@
 
 import Foundation
 
-public protocol NetworkingClientType {
+public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
+    func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
 }
 
 public protocol URLSessionType {
@@ -23,7 +24,7 @@ public protocol ResponseDecoder {
 
 extension JSONDecoder: ResponseDecoder { }
 
-public final class HTTPNetworkingClient {
+public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     private let urlSession: URLSessionType
     private let config: HTTPNetworkingConfigurationType
     
@@ -127,7 +128,7 @@ public final class HTTPNetworkingClient {
     
     public func get<T: Decodable>(path: String,
                                   queryItems: [URLQueryItem]?,
-                                  headers: [HTTPHeader]? = nil,
+                                  headers: [HTTPHeader]?,
                                   decoder: ResponseDecoder) async throws -> T {
         let result: T = try await makeDataRequest(path: path,
                                                   queryItems: queryItems,
@@ -137,5 +138,19 @@ public final class HTTPNetworkingClient {
                                                   decoder: decoder)
         
         return result
+    }
+    
+    public func getJSON<T: Decodable>(path: String,
+                                      queryItems: [URLQueryItem]?,
+                                      headers: [HTTPHeader]?,
+                                      decoder: ResponseDecoder) async throws -> T {
+        
+        var headers = headers ?? []
+        headers += HTTPHeader.jsonHeaders()
+        
+        return try await get(path: path,
+                             queryItems: queryItems,
+                             headers: headers,
+                             decoder: decoder)
     }
 }

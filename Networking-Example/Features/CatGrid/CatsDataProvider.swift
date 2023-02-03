@@ -6,16 +6,17 @@
 //
 
 import Foundation
+import APIService
 
 class CatsDataProvider: ObservableObject {
     @Published var viewModels: [CatImageViewModel] = []
     @Published var retrievingCats: Bool = false
     
-    private let service: ImagesService
+    private let service: ImagesServiceType
     
     // MARK: - Init
     
-    init(service: ImagesService) {
+    init(service: ImagesServiceType) {
         self.service = service
     }
     
@@ -37,7 +38,7 @@ class CatsDataProvider: ObservableObject {
         self.viewModels = buildViewModels(from: cats)
     }
     
-    private func buildViewModels(from cats: [SearchResult]) -> [CatImageViewModel] {
+    private func buildViewModels(from cats: [ImageResult]) -> [CatImageViewModel] {
         return cats.map { CatImageViewModel(id: $0.id, imageURL: $0.url) }
     }
 }
