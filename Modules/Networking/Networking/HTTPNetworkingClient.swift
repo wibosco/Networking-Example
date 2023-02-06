@@ -10,13 +10,19 @@ import Foundation
 public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
     func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws -> T
+    func downloadData(url: URL, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
 }
 
 public protocol URLSessionType {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
+    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse)
 }
 
-extension URLSession: URLSessionType { }
+extension URLSession: URLSessionType {
+    public func bytes(for request: URLRequest) async throws -> (AsyncBytes, URLResponse) {
+       return try await bytes(for: request, delegate: nil)
+    }
+}
 
 public protocol ResponseDecoder {
     func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T
@@ -69,6 +75,35 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         }
     }
     
+    private func makeDownloadRequest(url: URL,
+                                     progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
+        let request = buildRequest(forURL: url,
+                                   httpMethod: .GET,
+                                   body: nil,
+                                   headers: nil)
+        
+        let (asyncBytes, urlResponse) = try await urlSession.bytes(for: request)
+        
+        let length = Int(urlResponse.expectedContentLength)
+        
+        var data = Data()
+        data.reserveCapacity(length) //avoid too many resizes by reserving what we should need
+
+        var existingProgress: Double = 0
+        
+        for try await byte in asyncBytes {
+            data.append(byte)
+            let currentProgress = Double(data.count) / Double(length)
+
+            if Int(existingProgress) != Int(currentProgress * 100) { //use fuzzy comparison here instead of convertng to int?
+                progressUpdateHandler?(currentProgress)
+                existingProgress = (currentProgress * 100)
+            }
+        }
+        
+        return data
+    }
+    
     // MARK: - URL
     
     private func buildURL(forPath path: String,
@@ -86,7 +121,8 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         return url
     }
     
-    private func buildRequest(forURL url: URL, httpMethod: HTTPMethod,
+    private func buildRequest(forURL url: URL,
+                              httpMethod: HTTPMethod,
                               body: Data?,
                               headers: [HTTPHeader]?) -> URLRequest {
         var urlRequest = URLRequest(url: url)
@@ -151,5 +187,13 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
                              queryItems: queryItems,
                              headers: headers,
                              decoder: JSONDecoder())
+    }
+    
+    public func downloadData(url: URL,
+                             progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
+        let data  = try await makeDownloadRequest(url: url,
+                                                  progressUpdateHandler: progressUpdateHandler)
+            
+        return data
     }
 }

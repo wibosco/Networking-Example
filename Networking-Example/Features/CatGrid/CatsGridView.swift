@@ -29,13 +29,13 @@ struct CatsGridView: View {
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(dataProvider.viewModels, id: \.id) { viewModel in
+                                ForEach(dataProvider.viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let catDetailsDataProvider = CatDetailsDataProvider(id: viewModel.id,
+                                        let catDetailsDataProvider = CatDetailsDataProvider(id: catViewModel.id,
                                                                                             service: dataProvider.service)
                                         CatDetailsView(dataProvider: catDetailsDataProvider)
                                     } label: {
-                                        CatImageCell(viewModel: viewModel)
+                                        CatImageCell(viewModel: catViewModel)
                                             .frame(width: sideLength, height: sideLength)
                                     }
                                 }
@@ -57,25 +57,28 @@ struct CatsGridView: View {
 }
 
 struct CatImageCell: View {
-    let viewModel: CatImageViewModel
+    @StateObject var viewModel: CatViewModel
     
     var body: some View {
         VStack {
-            AsyncImage(url: viewModel.imageURL) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image.resizable()
-                        .aspectRatio(contentMode: .fill)
+            switch viewModel.state {
+            case .empty:
+                //TODO: Implement placeholder image
+                EmptyView()
+            case .retrieving:
+                ProgressView()
+            case .retrieved(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                         .clipped()
-                case .failure:
-                    Image(systemName: "photo")
-                @unknown default:
-                    Image(systemName: "photo")
-                }
+            case .failed:
+                //TODO: Implement failed image
+                EmptyView()
             }
+        }
+        .task {
+            await viewModel.retrieveImage()
         }
     }
 }

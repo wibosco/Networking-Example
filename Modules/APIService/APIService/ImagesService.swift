@@ -7,15 +7,17 @@
 
 import Foundation
 import Networking
+import SwiftUI
 
-public struct ImageResult: Decodable {
+public struct Cat: Decodable {
     public let id: String
     public let url: URL
 }
 
 public protocol ImagesServiceType {
-    func retrieveCatImages() async -> [ImageResult]
-    func retrieveCatImage(for id: String) async -> ImageResult
+    func retrieveCats() async -> [Cat]
+    func retrieveCat(for id: String) async -> Cat
+    func retrieveImage(from url: URL) async -> Image
 }
 
 public class ImagesService: ImagesServiceType {
@@ -27,9 +29,9 @@ public class ImagesService: ImagesServiceType {
         self.networkingClient = networkingClient
     }
     
-    // MARK: - Search
+    // MARK: - Images
     
-    public func retrieveCatImages() async -> [ImageResult] {
+    public func retrieveCats() async -> [Cat] {
         let orderQueryItem = URLQueryItem(name: "order", value: "RANDOM")
         let mimeTypeQueryItem = URLQueryItem(name: "mime_types", value: "jpg")
         let limitQueryItem = URLQueryItem(name: "limit", value: "24")
@@ -40,9 +42,9 @@ public class ImagesService: ImagesServiceType {
         let queryItems = [orderQueryItem, mimeTypeQueryItem, limitQueryItem, includeBreedsQueryItem, includeCategoriesQueryItem, sizeQueryItem]
         
         do {
-            let results: [ImageResult] = try await networkingClient.getJSON(path: "/v1/images/search",
-                                                                            queryItems: queryItems,
-                                                                            headers: nil)
+            let results: [Cat] = try await networkingClient.getJSON(path: "/v1/images/search",
+                                                                    queryItems: queryItems,
+                                                                    headers: nil)
             
             return results
         } catch let error {
@@ -51,17 +53,35 @@ public class ImagesService: ImagesServiceType {
         }
     }
     
-    // MARK: - Image
-    
-    public func retrieveCatImage(for id: String) async -> ImageResult {
+    public func retrieveCat(for id: String) async -> Cat {
         do {
             let sizeQueryItem = URLQueryItem(name: "size", value: "full")
             
-            let result: ImageResult = try await networkingClient.getJSON(path: "/v1/images/\(id)",
-                                                                         queryItems: [sizeQueryItem],
-                                                                         headers: nil)
+            let result: Cat = try await networkingClient.getJSON(path: "/v1/images/\(id)",
+                                                                 queryItems: [sizeQueryItem],
+                                                                 headers: nil)
             
             return result
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    // MARK: - Image
+    
+    public func retrieveImage(from url: URL) async -> Image {
+        do {
+            let data = try await networkingClient.downloadData(url: url, progressUpdateHandler: { progess in
+                print("Progress: \(progess)")
+            })
+            
+            guard let uiImage = UIImage(data: data) else {
+                //TODO: Handle
+                fatalError()
+            }
+            
+            let image = Image(uiImage: uiImage)
+            return image
         } catch let error {
             fatalError(error.localizedDescription)
         }

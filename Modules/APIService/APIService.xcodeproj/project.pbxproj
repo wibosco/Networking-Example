@@ -11,6 +11,8 @@
 		433C2EF8298BCDA5009C7B10 /* APIService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 433C2EED298BCDA5009C7B10 /* APIService.framework */; };
 		433C2EFD298BCDA5009C7B10 /* APIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433C2EFC298BCDA5009C7B10 /* APIServiceTests.swift */; };
 		433C2F11298BCDD4009C7B10 /* ImagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433C2F10298BCDD4009C7B10 /* ImagesService.swift */; };
+		4373E19E299062F20021B8D4 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4373E19D299062F20021B8D4 /* Networking.framework */; };
+		4373E19F299062F20021B8D4 /* Networking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4373E19D299062F20021B8D4 /* Networking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +25,27 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4373E1A0299062F20021B8D4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4373E19F299062F20021B8D4 /* Networking.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		433C2EED298BCDA5009C7B10 /* APIService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = APIService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		433C2EF1298BCDA5009C7B10 /* APIService.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = APIService.docc; sourceTree = "<group>"; };
 		433C2EF7298BCDA5009C7B10 /* APIServiceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APIServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		433C2EFC298BCDA5009C7B10 /* APIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTests.swift; sourceTree = "<group>"; };
 		433C2F10298BCDD4009C7B10 /* ImagesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesService.swift; sourceTree = "<group>"; };
+		4373E19D299062F20021B8D4 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4373E19E299062F20021B8D4 /* Networking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +74,7 @@
 				433C2EEF298BCDA5009C7B10 /* APIService */,
 				433C2EFB298BCDA5009C7B10 /* APIServiceTests */,
 				433C2EEE298BCDA5009C7B10 /* Products */,
+				4373E19C299062F20021B8D4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +104,14 @@
 			path = APIServiceTests;
 			sourceTree = "<group>";
 		};
+		4373E19C299062F20021B8D4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4373E19D299062F20021B8D4 /* Networking.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -106,6 +133,7 @@
 				433C2EE9298BCDA5009C7B10 /* Sources */,
 				433C2EEA298BCDA5009C7B10 /* Frameworks */,
 				433C2EEB298BCDA5009C7B10 /* Resources */,
+				4373E1A0299062F20021B8D4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -251,6 +279,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -312,6 +341,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -337,6 +367,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -371,6 +402,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -406,6 +438,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -426,6 +459,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;

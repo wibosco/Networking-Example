@@ -30,7 +30,7 @@ class CatDetailsDataProvider: ObservableObject {
     func retrieveCatDetails() async {
         retrievingDetails = true
         
-        let catImage = await service.retrieveCatImage(for: id)
+        let catImage = await service.retrieveCat(for: id)
         
         self.viewModel = CatDetailViewModel(id: catImage.id, imageURL: catImage.url)
         
