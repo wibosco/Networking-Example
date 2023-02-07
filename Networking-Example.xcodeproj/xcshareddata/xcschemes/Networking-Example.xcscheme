@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1400"
+   LastUpgradeVersion = "1420"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -58,6 +58,16 @@
                BuildableName = "NetworkingTests.xctest"
                BlueprintName = "NetworkingTests"
                ReferencedContainer = "container:Modules/Networking/Networking.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "433C2EF6298BCDA5009C7B10"
+               BuildableName = "APIServiceTests.xctest"
+               BlueprintName = "APIServiceTests"
+               ReferencedContainer = "container:Modules/APIService/APIService.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
