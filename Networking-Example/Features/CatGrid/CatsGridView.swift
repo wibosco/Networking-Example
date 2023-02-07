@@ -31,9 +31,9 @@ struct CatsGridView: View {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
                                 ForEach(dataProvider.viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let catDetailsDataProvider = CatDetailsDataProvider(id: catViewModel.id,
-                                                                                            service: dataProvider.service)
-                                        CatDetailsView(dataProvider: catDetailsDataProvider)
+                                        let detailsViewModel = CatDetailsViewModel(id: catViewModel.id,
+                                                                                   service: dataProvider.service)
+                                        CatDetailsView(viewModel: detailsViewModel)
                                     } label: {
                                         CatImageCell(viewModel: catViewModel)
                                             .frame(width: sideLength, height: sideLength)
@@ -60,25 +60,20 @@ struct CatImageCell: View {
     @StateObject var viewModel: CatViewModel
     
     var body: some View {
-        VStack {
-            switch viewModel.state {
+        AsyncImage(url: viewModel.url) { phase in
+            switch phase {
             case .empty:
-                //TODO: Implement placeholder image
-                EmptyView()
-            case .retrieving:
                 ProgressView()
-            case .retrieved(let image):
+            case .success(let image):
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .clipped()
-            case .failed:
-                //TODO: Implement failed image
-                EmptyView()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+            case .failure:
+                Image(systemName: "photo")
+            @unknown default:
+                Image(systemName: "photo")
             }
-        }
-        .task {
-            await viewModel.retrieveImage()
         }
     }
 }

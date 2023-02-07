@@ -8,35 +8,31 @@
 import SwiftUI
 
 struct CatDetailsView: View {
-    @StateObject var dataProvider: CatDetailsDataProvider
+    @StateObject var viewModel: CatDetailsViewModel
     
     var body: some View {
         VStack {
-            if dataProvider.retrievingDetails {
-                ProgressView("Loading Cat...")
-            } else if let viewModel = dataProvider.viewModel {
-                AsyncImage(url: viewModel.imageURL) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                            .clipped()
-                    case .failure:
-                        Image(systemName: "photo")
-                    @unknown default:
-                        Image(systemName: "photo")
-                    }
+            switch viewModel.state {
+            case .empty:
+                //TODO: Implement placeholder image
+                EmptyView()
+            case .retrieving(let percentageRetrieved):
+                VStack {
+                    ProgressView(value: percentageRetrieved, total: 1)
+                        .padding(.horizontal, 100)
                 }
-            } else {
-                //TODO: handle better error
-                Image(systemName: "photo")
+            case .retrieved(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .clipped()
+            case .failed:
+                //TODO: Implement failed image
+                EmptyView()
             }
         }
         .task {
-            await dataProvider.retrieveCatDetails()
+            await viewModel.retrieveImage()
         }
     }
 }

@@ -24,7 +24,7 @@ struct Networking_ExampleApp: App {
             let networkingClient =  HTTPNetworkingClient(urlSession: URLSession.shared,
                                                          config: config)
             
-            let imageService = ImagesService(networkingClient: networkingClient)
+            let imageService = ImagesEndpointService(networkingClient: networkingClient)
             
             let dataProvider = CatsGridDataProvider(service: imageService)
             CatsGridView(dataProvider: dataProvider)

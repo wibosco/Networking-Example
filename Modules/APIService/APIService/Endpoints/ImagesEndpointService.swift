@@ -14,13 +14,13 @@ public struct Cat: Decodable {
     public let url: URL
 }
 
-public protocol ImagesServiceType {
+public protocol ImagesEndpointServiceType {
     func retrieveCats() async -> [Cat]
     func retrieveCat(for id: String) async -> Cat
-    func retrieveImage(from url: URL) async -> Image
+    func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image
 }
 
-public class ImagesService: ImagesServiceType {
+public class ImagesEndpointService: ImagesEndpointServiceType {
     let networkingClient: HTTPNetworkingClientType
     
     // MARK: - Init
@@ -69,10 +69,12 @@ public class ImagesService: ImagesServiceType {
     
     // MARK: - Image
     
-    public func retrieveImage(from url: URL) async -> Image {
+    public func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image {
         do {
-            let data = try await networkingClient.downloadData(url: url, progressUpdateHandler: { progess in
-                print("Progress: \(progess)")
+            let data = try await networkingClient.downloadData(url: url,
+                                                               progressThreshold: .everyTwenty,
+                                                               progressUpdateHandler: { percentageRetrieved in
+                progressUpdateHandler?(percentageRetrieved)
             })
             
             guard let uiImage = UIImage(data: data) else {
@@ -83,6 +85,7 @@ public class ImagesService: ImagesServiceType {
             let image = Image(uiImage: uiImage)
             return image
         } catch let error {
+            //TODO: Handle better
             fatalError(error.localizedDescription)
         }
     }

@@ -14,11 +14,11 @@ class CatsGridDataProvider: ObservableObject {
     @Published var viewModels: [CatViewModel] = []
     @Published var retrievingCats: Bool = false
     
-    let service: ImagesServiceType //TODO: Should be private
+    let service: ImagesEndpointServiceType //TODO: Should be private or an environment var
     
     // MARK: - Init
     
-    init(service: ImagesServiceType) {
+    init(service: ImagesEndpointServiceType) {
         self.service = service
     }
     
@@ -43,37 +43,15 @@ class CatsGridDataProvider: ObservableObject {
     }
 }
 
-enum ImageRetrievalState {
-    case empty
-    case retrieving
-    case retrieved(_ image: Image)
-    case failed
-}
-
 @MainActor
 class CatViewModel: ObservableObject {
     let id: String
     let url: URL
     
-    @Published var state: ImageRetrievalState = .empty
-    
-    private let service: ImagesServiceType
-    
     // MARK: - Init
     
-    init(id: String, url: URL, service: ImagesServiceType) {
+    init(id: String, url: URL, service: ImagesEndpointServiceType) {
         self.id = id
         self.url = url
-        self.service = service
-    }
-    
-    // MARK: - Image
-    
-    func retrieveImage() async {
-        state = .retrieving
-        
-        let image = await service.retrieveImage(from: url)
-        
-        state = .retrieved(image)
     }
 }

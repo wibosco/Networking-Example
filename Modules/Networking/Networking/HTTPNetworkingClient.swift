@@ -10,7 +10,7 @@ import Foundation
 public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
     func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws -> T
-    func downloadData(url: URL, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
+    func downloadData(url: URL, progressThreshold: ProgressThreshold, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
 }
 
 public protocol URLSessionType {
@@ -76,6 +76,7 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     }
     
     private func makeDownloadRequest(url: URL,
+                                     progressThreshold: ProgressThreshold,
                                      progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
         let request = buildRequest(forURL: url,
                                    httpMethod: .GET,
@@ -91,15 +92,32 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
 
         var existingProgress: Double = 0
         
+//        var c = 0
+        
         for try await byte in asyncBytes {
+//            c += 1
             data.append(byte)
             let currentProgress = Double(data.count) / Double(length)
-
-            if Int(existingProgress) != Int(currentProgress * 100) { //use fuzzy comparison here instead of convertng to int?
+            
+//            print("")
+//            print("\(c)")
+//            print("data.count: \(Double(data.count))")
+//            print("length: \(Double(length))")
+//
+//            print("current progress: \(currentProgress)")
+//            print("existing progress: \(existingProgress)")
+//
+            let difference = currentProgress - existingProgress
+//
+//            print("difference: \(difference)")
+            
+            if difference > progressThreshold.rawValue { //use fuzzy comparison here instead of convertng to int?
                 progressUpdateHandler?(currentProgress)
-                existingProgress = (currentProgress * 100)
+                existingProgress = min(currentProgress, 1)
             }
         }
+        
+//        print("here \(c)")
         
         return data
     }
@@ -190,10 +208,18 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     }
     
     public func downloadData(url: URL,
+                             progressThreshold: ProgressThreshold = .everyOne,
                              progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
         let data  = try await makeDownloadRequest(url: url,
+                                                  progressThreshold: progressThreshold,
                                                   progressUpdateHandler: progressUpdateHandler)
             
         return data
     }
+}
+
+public enum ProgressThreshold: Double {
+    case everyOne = 0.01
+    case everyTen = 0.1
+    case everyTwenty = 0.2
 }
