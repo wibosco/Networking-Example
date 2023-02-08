@@ -10,6 +10,8 @@
 		3D1E3BFC2983DCB900B2BFAB /* Networking_ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E3BFB2983DCB900B2BFAB /* Networking_ExampleTests.swift */; };
 		3D1E3C062983DCB900B2BFAB /* Networking_ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E3C052983DCB900B2BFAB /* Networking_ExampleUITests.swift */; };
 		3D1E3C082983DCB900B2BFAB /* Networking_ExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E3C072983DCB900B2BFAB /* Networking_ExampleUITestsLaunchTests.swift */; };
+		43023D0C2993BE0100E420C2 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43023D0B2993BE0100E420C2 /* ImagePickerView.swift */; };
+		43023D102994458D00E420C2 /* ImagePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43023D0F2994458D00E420C2 /* ImagePickerViewModel.swift */; };
 		433C2F13298BD071009C7B10 /* APIService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 433C2F12298BD071009C7B10 /* APIService.framework */; };
 		433C2F14298BD071009C7B10 /* APIService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 433C2F12298BD071009C7B10 /* APIService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		433C2F1E298BDC9F009C7B10 /* Networking_ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433C2F1A298BDC9F009C7B10 /* Networking_ExampleApp.swift */; };
@@ -59,6 +61,9 @@
 		3D1E3C012983DCB900B2BFAB /* Networking-ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Networking-ExampleUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D1E3C052983DCB900B2BFAB /* Networking_ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking_ExampleUITests.swift; sourceTree = "<group>"; };
 		3D1E3C072983DCB900B2BFAB /* Networking_ExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking_ExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		43023D0B2993BE0100E420C2 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		43023D0D2993C28100E420C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		43023D0F2994458D00E420C2 /* ImagePickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewModel.swift; sourceTree = "<group>"; };
 		433C2F12298BD071009C7B10 /* APIService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = APIService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		433C2F1A298BDC9F009C7B10 /* Networking_ExampleApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking_ExampleApp.swift; sourceTree = "<group>"; };
 		433C2F22298BDD6D009C7B10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,6 +125,7 @@
 		3D1E3BE92983DCB600B2BFAB /* Networking-Example */ = {
 			isa = PBXGroup;
 			children = (
+				43023D0D2993C28100E420C2 /* Info.plist */,
 				433C2F19298BDC9F009C7B10 /* App */,
 				433C2F1B298BDC9F009C7B10 /* Features */,
 				433C2F21298BDD6D009C7B10 /* Resources */,
@@ -144,6 +150,15 @@
 			path = "Networking-ExampleUITests";
 			sourceTree = "<group>";
 		};
+		43023D0A2993BDF400E420C2 /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				43023D0B2993BE0100E420C2 /* ImagePickerView.swift */,
+				43023D0F2994458D00E420C2 /* ImagePickerViewModel.swift */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
 		433C2F19298BDC9F009C7B10 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +170,7 @@
 		433C2F1B298BDC9F009C7B10 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				43023D0A2993BDF400E420C2 /* ImagePicker */,
 				43F4E9FE298D58D500E72F4C /* CatDetail */,
 				435D13A0298C1C15004A9946 /* CatGrid */,
 			);
@@ -336,10 +352,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43023D102994458D00E420C2 /* ImagePickerViewModel.swift in Sources */,
 				43F4EA02298D595600E72F4C /* CatDetailsViewModel.swift in Sources */,
 				43F4EA00298D58F200E72F4C /* CatDetailsView.swift in Sources */,
 				435D13A4298C1C15004A9946 /* CatsGridViewModel.swift in Sources */,
 				433C2F1E298BDC9F009C7B10 /* Networking_ExampleApp.swift in Sources */,
+				43023D0C2993BE0100E420C2 /* ImagePickerView.swift in Sources */,
 				435D13A3298C1C15004A9946 /* CatsGridView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,7 +519,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Networking-Example/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "Networking-Example/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -529,7 +547,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Networking-Example/Resources/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "Networking-Example/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

@@ -14,10 +14,18 @@ public struct Cat: Decodable {
     public let url: URL
 }
 
+public struct CatUploadOutcome: Decodable {
+    public let id: String
+    public let url: URL
+    public let pending: Bool
+    public let approved: Bool
+}
+
 public protocol ImagesEndpointServiceType {
     func retrieveCats() async -> [Cat]
     func retrieveCat(for id: String) async -> Cat
     func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image
+    func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome
 }
 
 public class ImagesEndpointService: ImagesEndpointServiceType {
@@ -78,12 +86,26 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
             })
             
             guard let uiImage = UIImage(data: data) else {
-                //TODO: Handle
+                //TODO: Handle better
                 fatalError()
             }
             
             let image = Image(uiImage: uiImage)
             return image
+        } catch let error {
+            //TODO: Handle better
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    @discardableResult public func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome {
+        do {
+            let outcome: CatUploadOutcome = try await networkingClient.postImage(path: "/v1/images/upload",
+                                                                                 image: image,
+                                                                                 headers: nil,
+                                                                                 decoder: JSONDecoder())
+            
+            return outcome
         } catch let error {
             //TODO: Handle better
             fatalError(error.localizedDescription)

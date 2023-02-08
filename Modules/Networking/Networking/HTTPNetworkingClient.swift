@@ -6,11 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
     func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws -> T
     func downloadData(url: URL, progressThreshold: ProgressThreshold, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
+    func post<T: Decodable>(path: String, data: Data, mimeType: MimeType, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
+    func postImage<T: Decodable>(path: String, image: UIImage, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
 }
 
 public protocol URLSessionType {
@@ -20,7 +23,7 @@ public protocol URLSessionType {
 
 extension URLSession: URLSessionType {
     public func bytes(for request: URLRequest) async throws -> (AsyncBytes, URLResponse) {
-       return try await bytes(for: request, delegate: nil)
+        return try await bytes(for: request, delegate: nil)
     }
 }
 
@@ -89,35 +92,77 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         
         var data = Data()
         data.reserveCapacity(length) //avoid too many resizes by reserving what we should need
-
+        
         var existingProgress: Double = 0
         
-//        var c = 0
-        
         for try await byte in asyncBytes {
-//            c += 1
             data.append(byte)
             let currentProgress = Double(data.count) / Double(length)
             
-//            print("")
-//            print("\(c)")
-//            print("data.count: \(Double(data.count))")
-//            print("length: \(Double(length))")
-//
-//            print("current progress: \(currentProgress)")
-//            print("existing progress: \(existingProgress)")
-//
             let difference = currentProgress - existingProgress
-//
-//            print("difference: \(difference)")
             
-            if difference > progressThreshold.rawValue { //use fuzzy comparison here instead of convertng to int?
+            if difference > progressThreshold.rawValue {
                 progressUpdateHandler?(currentProgress)
                 existingProgress = min(currentProgress, 1)
             }
         }
         
-//        print("here \(c)")
+        return data
+    }
+    
+    private func makeMultipartReqest<T: Decodable>(path: String,
+                                                   data: Data,
+                                                   mimeType: MimeType,
+                                                   headers: [HTTPHeader]?,
+                                                   decoder: ResponseDecoder) async throws -> T {
+        let url = buildURL(forPath: path)
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        
+        let multipartHeader = HTTPHeader(field: "Content-Type",
+                                         value: "multipart/form-data; boundary=\(boundary)")
+        
+        var headers = headers ?? []
+        headers += [multipartHeader]
+        
+        var body = convertFileData(fieldName: "file",
+                                   fileName: "\(UUID().uuidString).jpeg",
+                                   mimeType: mimeType.rawValue,
+                                   fileData: data,
+                                   using: boundary)
+        
+        body.append("--\(boundary)--")
+        
+        let urlRequest = buildRequest(forURL: url,
+                                      httpMethod: .POST,
+                                      body: body,
+                                      headers: headers)
+        
+        do {
+            let (data, response) = try await urlSession.data(for: urlRequest)
+            
+            let decoded: T = try self.decodeResponse(fromData: data,
+                                                     response: response,
+                                                     decoder: decoder)
+            
+            return decoded
+        } catch let error as HTTPNetworkingError {
+            throw error
+        } catch let underlyingError {
+            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
+            
+            throw error
+        }
+    }
+    
+    private func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
+        var data = Data()
+        
+        data.append("--\(boundary)\r\n")
+        data.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
+        data.append("Content-Type: \(mimeType)\r\n\r\n")
+        data.append(fileData)
+        data.append("\r\n")
         
         return data
     }
@@ -146,7 +191,9 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = httpMethod.rawValue
         
-        headers?.forEach({ header in
+        let combinedHeaders = config.defaultHeaders + (headers ?? [])
+        
+        combinedHeaders.forEach({ header in
             urlRequest.addValue(header.value, forHTTPHeaderField: header.field)
         })
         
@@ -201,10 +248,12 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         var headers = headers ?? []
         headers += HTTPHeader.jsonHeaders()
         
-        return try await get(path: path,
-                             queryItems: queryItems,
-                             headers: headers,
-                             decoder: JSONDecoder())
+        let result: T = try await get(path: path,
+                                      queryItems: queryItems,
+                                      headers: headers,
+                                      decoder: JSONDecoder())
+        
+        return result
     }
     
     public func downloadData(url: URL,
@@ -213,13 +262,53 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         let data  = try await makeDownloadRequest(url: url,
                                                   progressThreshold: progressThreshold,
                                                   progressUpdateHandler: progressUpdateHandler)
-            
+        
         return data
+    }
+    
+    // MARK: - POST
+    
+    public func post<T: Decodable>(path: String,
+                                   data: Data,
+                                   mimeType: MimeType,
+                                   headers: [HTTPHeader]?,
+                                   decoder: ResponseDecoder) async throws -> T {
+        let result: T =  try await makeMultipartReqest(path: path,
+                                                       data: data,
+                                                       mimeType: mimeType,
+                                                       headers: headers,
+                                                       decoder: decoder)
+        
+        return result
+    }
+    
+    public func postImage<T: Decodable>(path: String,
+                                        image: UIImage,
+                                        headers: [HTTPHeader]?,
+                                        decoder: ResponseDecoder) async throws -> T {
+        guard let data = image.jpegData(compressionQuality: 1.0) else {
+            //TODO: Handle better
+            fatalError()
+        }
+        
+        let result: T = try await post(path: path,
+                                       data: data,
+                                       mimeType: .jpeg,
+                                       headers: headers,
+                                       decoder: decoder)
+        
+        return result
     }
 }
 
-public enum ProgressThreshold: Double {
-    case everyOne = 0.01
-    case everyTen = 0.1
-    case everyTwenty = 0.2
+public enum MimeType: String {
+    case jpeg = "image/jpeg"
+}
+
+extension Data {
+    mutating func append(_ newElement: String) {
+        if let data = newElement.data(using: .utf8) {
+            self.append(data)
+        }
+    }
 }

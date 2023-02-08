@@ -9,6 +9,7 @@ import Foundation
 import APIService
 import SwiftUI
 
+@MainActor
 class CatDetailsViewModel: ObservableObject {
     private let id: String
     private let service: ImagesEndpointServiceType
@@ -24,8 +25,7 @@ class CatDetailsViewModel: ObservableObject {
     }
     
     // MARK: - Retrieval
-    
-    @MainActor
+
     func retrieveImage() async {
         state = .retrieving(0)
         
