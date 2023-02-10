@@ -14,6 +14,7 @@
 		437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50872989462B00C906D4 /* HTTPNetworkingError.swift */; };
 		437D508A2989576700C906D4 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50892989576700C906D4 /* HTTPMethod.swift */; };
 		437D508C2989578300C906D4 /* HTTPHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D508B2989578300C906D4 /* HTTPHeader.swift */; };
+		439F906F2992AD0700BCFFD8 /* ProgressThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		437D50872989462B00C906D4 /* HTTPNetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingError.swift; sourceTree = "<group>"; };
 		437D50892989576700C906D4 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		437D508B2989578300C906D4 /* HTTPHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPHeader.swift; sourceTree = "<group>"; };
+		439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressThreshold.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */,
 				437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */,
 				437D50872989462B00C906D4 /* HTTPNetworkingError.swift */,
+				439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				437D5086298943D900C906D4 /* HTTPNetworkingConfiguration.swift in Sources */,
 				437D508C2989578300C906D4 /* HTTPHeader.swift in Sources */,
 				437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */,
+				439F906F2992AD0700BCFFD8 /* ProgressThreshold.swift in Sources */,
 				3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
