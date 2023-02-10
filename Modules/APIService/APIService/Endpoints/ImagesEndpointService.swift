@@ -17,15 +17,23 @@ public struct Cat: Decodable {
 public struct CatUploadOutcome: Decodable {
     public let id: String
     public let url: URL
-    public let pending: Bool
-    public let approved: Bool
+    public let pending: Int
+    public let approved: Int
 }
 
 public protocol ImagesEndpointServiceType {
-    func retrieveCats() async -> [Cat]
+    func retrieveOthersCats() async -> [Cat]
     func retrieveCat(for id: String) async -> Cat
     func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image
-    func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome
+    @discardableResult func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome
+    func retrieveMyCats() async -> [Cat]
+    func deleteCat(_ id: String) async
+}
+
+private enum Order: String {
+    case descending = "DESC"
+    case ascending = "ASC"
+    case random = "RANDOM"
 }
 
 public class ImagesEndpointService: ImagesEndpointServiceType {
@@ -37,10 +45,43 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
         self.networkingClient = networkingClient
     }
     
+    // MARK: - Mine
+    
+    public func retrieveMyCats() async -> [Cat] {
+        let orderQueryItem = URLQueryItem(name: "order", value: Order.descending.rawValue)
+        let limitQueryItem = URLQueryItem(name: "limit", value: "10")
+        let formatQueryItem = URLQueryItem(name: "format", value: "json")
+        
+        
+        let queryItems = [orderQueryItem, limitQueryItem, formatQueryItem]
+        
+        do {
+            let results: [Cat] = try await networkingClient.getJSON(path: "/v1/images",
+                                                                    queryItems: queryItems,
+                                                                    headers: nil)
+            
+            return results
+        } catch let error {
+            //TODO: Handle better
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func deleteCat(_ id: String) async {
+        do {
+            try await networkingClient.delete(path: "/v1/images/\(id)",
+                                              queryItems: nil,
+                                              headers: nil)
+        } catch let error {
+            //TODO: Handle better
+            fatalError(error.localizedDescription)
+        }
+    }
+    
     // MARK: - Images
     
-    public func retrieveCats() async -> [Cat] {
-        let orderQueryItem = URLQueryItem(name: "order", value: "RANDOM")
+    public func retrieveOthersCats() async -> [Cat] {
+        let orderQueryItem = URLQueryItem(name: "order", value: Order.random.rawValue)
         let mimeTypeQueryItem = URLQueryItem(name: "mime_types", value: "jpg")
         let limitQueryItem = URLQueryItem(name: "limit", value: "24")
         let includeBreedsQueryItem = URLQueryItem(name: "include_breeds", value: "false")
@@ -56,8 +97,8 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
             
             return results
         } catch let error {
+            //TODO: Handle better
             fatalError(error.localizedDescription)
-            //handle
         }
     }
     

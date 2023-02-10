@@ -1,15 +1,14 @@
 //
-//  ContentView.swift
+//  MyCatsView.swift
 //  Networking-Example
 //
-//  Created by William Boles on 27/01/2023.
+//  Created by William Boles on 10/02/2023.
 //
 
 import SwiftUI
-import APIService
 
-struct CatsGridView: View {
-    @StateObject var dataProvider: CatsGridDataProvider
+struct MyCatsView: View {
+    @StateObject var viewModel: MyCatsViewModel
     
     // MARK: - View
     
@@ -22,42 +21,50 @@ struct CatsGridView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if dataProvider.retrievingCats {
+                switch viewModel.state {
+                case .empty:
+                    Text("You haven't uploaded any cats")
+                case .retrieving:
                     ProgressView("Loading Cats...")
-                } else {
+                case .retrieved(let viewModels):
                     GeometryReader { geometryReader in
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(dataProvider.viewModels, id: \.id) { catViewModel in
+                                ForEach(viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let detailsViewModel = CatDetailsViewModel(id: catViewModel.id,
-                                                                                   service: dataProvider.service)
-                                        CatDetailsView(viewModel: detailsViewModel)
+                                        let detailsViewModel = MyCatDetailsViewModel(id: catViewModel.id,
+                                                                                     service: viewModel.service)
+                                        MyCatDetailsView(viewModel: detailsViewModel)
                                     } label: {
-                                        CatImageCell(viewModel: catViewModel)
+                                        MyCatImageCell(viewModel: catViewModel)
                                             .frame(width: sideLength, height: sideLength)
                                     }
                                 }
                             }
                         }
                     }
+                case .failed:
+                    //TODO: Implement failed image
+                    EmptyView()
                 }
             }
             .padding()
-            .navigationTitle("Explore")
+            .navigationTitle("My Cats")
         }
-        .task {
-            await dataProvider.retrieveCats()
+        .onAppear {
+            Task {
+                await viewModel.retrieveCats()
+            }
         }
         .refreshable {
-            await dataProvider.refreshCats()
+            await viewModel.refreshCats()
         }
     }
 }
 
-struct CatImageCell: View {
-    let viewModel: CatViewModel
+struct MyCatImageCell: View {
+    let viewModel: MyCatViewModel
     
     var body: some View {
         AsyncImage(url: viewModel.url) { phase in
@@ -78,8 +85,8 @@ struct CatImageCell: View {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
+//struct MyCatsView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        ContentView()
+//        MyCatsView()
 //    }
 //}
