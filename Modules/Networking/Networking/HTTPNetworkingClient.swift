@@ -11,9 +11,13 @@ import UIKit
 public protocol HTTPNetworkingClientType {
     func get<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
     func getJSON<T: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws -> T
+    
     func downloadData(url: URL, progressThreshold: ProgressThreshold, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
+    
     func post<T: Decodable>(path: String, data: Data, mimeType: MimeType, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
     func postImage<T: Decodable>(path: String, image: UIImage, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> T
+    
+    func delete(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws
 }
 
 public protocol URLSessionType {
@@ -45,129 +49,7 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         self.config = config
     }
     
-    // MARK: - Request
-    
-    private func makeDataRequest<T: Decodable>(path: String,
-                                               queryItems: [URLQueryItem]?,
-                                               body: Data?,
-                                               httpMethod: HTTPMethod,
-                                               headers: [HTTPHeader]?,
-                                               decoder: ResponseDecoder) async throws -> T {
-        let url = buildURL(forPath: path,
-                           queryItems: queryItems)
-        
-        let urlRequest = buildRequest(forURL: url,
-                                      httpMethod: httpMethod,
-                                      body: body,
-                                      headers: headers)
-        
-        do {
-            let (data, response) = try await urlSession.data(for: urlRequest)
-            
-            let decoded: T = try self.decodeResponse(fromData: data,
-                                                     response: response,
-                                                     decoder: decoder)
-            
-            return decoded
-        } catch let error as HTTPNetworkingError {
-            throw error
-        } catch let underlyingError {
-            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
-            
-            throw error
-        }
-    }
-    
-    private func makeDownloadRequest(url: URL,
-                                     progressThreshold: ProgressThreshold,
-                                     progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
-        let request = buildRequest(forURL: url,
-                                   httpMethod: .GET,
-                                   body: nil,
-                                   headers: nil)
-        
-        let (asyncBytes, urlResponse) = try await urlSession.bytes(for: request)
-        
-        let length = Int(urlResponse.expectedContentLength)
-        
-        var data = Data()
-        data.reserveCapacity(length) //avoid too many resizes by reserving what we should need
-        
-        var existingProgress: Double = 0
-        
-        for try await byte in asyncBytes {
-            data.append(byte)
-            let currentProgress = Double(data.count) / Double(length)
-            
-            let difference = currentProgress - existingProgress
-            
-            if difference > progressThreshold.rawValue {
-                progressUpdateHandler?(currentProgress)
-                existingProgress = min(currentProgress, 1)
-            }
-        }
-        
-        return data
-    }
-    
-    private func makeMultipartReqest<T: Decodable>(path: String,
-                                                   data: Data,
-                                                   mimeType: MimeType,
-                                                   headers: [HTTPHeader]?,
-                                                   decoder: ResponseDecoder) async throws -> T {
-        let url = buildURL(forPath: path)
-        
-        let boundary = "Boundary-\(UUID().uuidString)"
-        
-        let multipartHeader = HTTPHeader(field: "Content-Type",
-                                         value: "multipart/form-data; boundary=\(boundary)")
-        
-        var headers = headers ?? []
-        headers += [multipartHeader]
-        
-        var body = convertFileData(fieldName: "file",
-                                   fileName: "\(UUID().uuidString).jpeg",
-                                   mimeType: mimeType.rawValue,
-                                   fileData: data,
-                                   using: boundary)
-        
-        body.append("--\(boundary)--")
-        
-        let urlRequest = buildRequest(forURL: url,
-                                      httpMethod: .POST,
-                                      body: body,
-                                      headers: headers)
-        
-        do {
-            let (data, response) = try await urlSession.data(for: urlRequest)
-            
-            let decoded: T = try self.decodeResponse(fromData: data,
-                                                     response: response,
-                                                     decoder: decoder)
-            
-            return decoded
-        } catch let error as HTTPNetworkingError {
-            throw error
-        } catch let underlyingError {
-            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
-            
-            throw error
-        }
-    }
-    
-    private func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
-        var data = Data()
-        
-        data.append("--\(boundary)\r\n")
-        data.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
-        data.append("Content-Type: \(mimeType)\r\n\r\n")
-        data.append(fileData)
-        data.append("\r\n")
-        
-        return data
-    }
-    
-    // MARK: - URL
+    // MARK: - Requests
     
     private func buildURL(forPath path: String,
                           queryItems: [URLQueryItem]? = nil) -> URL {
@@ -204,6 +86,8 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         return urlRequest
     }
     
+    // MARK: - Decoding
+    
     private func decodeResponse<T: Decodable>(fromData data: Data,
                                               response: URLResponse,
                                               decoder: ResponseDecoder) throws -> T {
@@ -226,6 +110,37 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     }
     
     // MARK: - GET
+    
+    private func makeDataRequest<T: Decodable>(path: String,
+                                               queryItems: [URLQueryItem]?,
+                                               body: Data?,
+                                               httpMethod: HTTPMethod,
+                                               headers: [HTTPHeader]?,
+                                               decoder: ResponseDecoder) async throws -> T {
+        let url = buildURL(forPath: path,
+                           queryItems: queryItems)
+        
+        let urlRequest = buildRequest(forURL: url,
+                                      httpMethod: httpMethod,
+                                      body: body,
+                                      headers: headers)
+        
+        do {
+            let (data, response) = try await urlSession.data(for: urlRequest)
+            
+            let decoded: T = try self.decodeResponse(fromData: data,
+                                                     response: response,
+                                                     decoder: decoder)
+            
+            return decoded
+        } catch let error as HTTPNetworkingError {
+            throw error
+        } catch let underlyingError {
+            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
+            
+            throw error
+        }
+    }
     
     public func get<T: Decodable>(path: String,
                                   queryItems: [URLQueryItem]?,
@@ -256,6 +171,40 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         return result
     }
     
+    // MARK: - Download
+    
+    private func makeDownloadRequest(url: URL,
+                                     progressThreshold: ProgressThreshold,
+                                     progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
+        let request = buildRequest(forURL: url,
+                                   httpMethod: .GET,
+                                   body: nil,
+                                   headers: nil)
+        
+        let (asyncBytes, urlResponse) = try await urlSession.bytes(for: request)
+        
+        let length = Int(urlResponse.expectedContentLength)
+        
+        var data = Data()
+        data.reserveCapacity(length) //avoid too many resizes by reserving what we should need
+        
+        var existingProgress: Double = 0
+        
+        for try await byte in asyncBytes {
+            data.append(byte)
+            let currentProgress = Double(data.count) / Double(length)
+            
+            let difference = currentProgress - existingProgress
+            
+            if difference > progressThreshold.rawValue {
+                progressUpdateHandler?(currentProgress)
+                existingProgress = min(currentProgress, 1)
+            }
+        }
+        
+        return data
+    }
+    
     public func downloadData(url: URL,
                              progressThreshold: ProgressThreshold = .everyOne,
                              progressUpdateHandler: ((Double) -> ())?) async throws -> Data {
@@ -267,6 +216,52 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
     }
     
     // MARK: - POST
+    
+    private func makeMultipartReqest<T: Decodable>(path: String,
+                                                   data: Data,
+                                                   mimeType: MimeType,
+                                                   headers: [HTTPHeader]?,
+                                                   decoder: ResponseDecoder) async throws -> T {
+        let url = buildURL(forPath: path)
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        
+        let multipartHeader = HTTPHeader(field: "Content-Type",
+                                         value: "multipart/form-data; boundary=\(boundary)")
+        
+        var headers = headers ?? []
+        headers += [multipartHeader]
+        
+        var body = Data()
+        
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(UUID().uuidString).jpeg\"\r\n")
+        body.append("Content-Type: \(mimeType)\r\n\r\n")
+        body.append(data)
+        body.append("\r\n")
+        body.append("--\(boundary)--")
+        
+        let urlRequest = buildRequest(forURL: url,
+                                      httpMethod: .POST,
+                                      body: body,
+                                      headers: headers)
+        
+        do {
+            let (data, response) = try await urlSession.data(for: urlRequest)
+            
+            let decoded: T = try self.decodeResponse(fromData: data,
+                                                     response: response,
+                                                     decoder: decoder)
+            
+            return decoded
+        } catch let error as HTTPNetworkingError {
+            throw error
+        } catch let underlyingError {
+            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
+            
+            throw error
+        }
+    }
     
     public func post<T: Decodable>(path: String,
                                    data: Data,
@@ -288,7 +283,7 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
                                         decoder: ResponseDecoder) async throws -> T {
         guard let data = image.jpegData(compressionQuality: 1.0) else {
             //TODO: Handle better
-            fatalError()
+            fatalError("Can not convery image to a jpeg")
         }
         
         let result: T = try await post(path: path,
@@ -299,16 +294,26 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
         
         return result
     }
-}
-
-public enum MimeType: String {
-    case jpeg = "image/jpeg"
-}
-
-extension Data {
-    mutating func append(_ newElement: String) {
-        if let data = newElement.data(using: .utf8) {
-            self.append(data)
+    
+    //MARK: - Delete
+    
+    public func delete(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws {
+        let url = buildURL(forPath: path,
+                           queryItems: queryItems)
+        
+        let urlRequest = buildRequest(forURL: url,
+                                      httpMethod: .DELETE,
+                                      body: nil,
+                                      headers: headers)
+        
+        do {
+            let (_, _) = try await urlSession.data(for: urlRequest)
+        } catch let error as HTTPNetworkingError {
+            throw error
+        } catch let underlyingError {
+            let error = HTTPNetworkingError.network(underlyingError: underlyingError)
+            
+            throw error
         }
     }
 }

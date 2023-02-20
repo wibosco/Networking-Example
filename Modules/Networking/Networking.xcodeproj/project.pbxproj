@@ -10,6 +10,8 @@
 		3DD8962D2983FCF300414419 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD896242983FCF100414419 /* Networking.framework */; };
 		3DD896322983FCF300414419 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD896312983FCF300414419 /* NetworkingTests.swift */; };
 		3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */; };
+		431E938129966C37009E9E1D /* Data+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431E938029966C37009E9E1D /* Data+Append.swift */; };
+		431E938329966C4D009E9E1D /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431E938229966C4D009E9E1D /* MimeType.swift */; };
 		437D5086298943D900C906D4 /* HTTPNetworkingConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */; };
 		437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50872989462B00C906D4 /* HTTPNetworkingError.swift */; };
 		437D508A2989576700C906D4 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D50892989576700C906D4 /* HTTPMethod.swift */; };
@@ -32,6 +34,8 @@
 		3DD8962C2983FCF300414419 /* NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD896312983FCF300414419 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 		3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingClient.swift; sourceTree = "<group>"; };
+		431E938029966C37009E9E1D /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
+		431E938229966C4D009E9E1D /* MimeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
 		437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingConfiguration.swift; sourceTree = "<group>"; };
 		437D50872989462B00C906D4 /* HTTPNetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingError.swift; sourceTree = "<group>"; };
 		437D50892989576700C906D4 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
@@ -79,12 +83,14 @@
 		3DD896262983FCF100414419 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				431E937F29966C28009E9E1D /* Extensions */,
 				437D508B2989578300C906D4 /* HTTPHeader.swift */,
 				437D50892989576700C906D4 /* HTTPMethod.swift */,
 				3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */,
 				437D5085298943D900C906D4 /* HTTPNetworkingConfiguration.swift */,
 				437D50872989462B00C906D4 /* HTTPNetworkingError.swift */,
 				439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */,
+				431E938229966C4D009E9E1D /* MimeType.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -95,6 +101,14 @@
 				3DD896312983FCF300414419 /* NetworkingTests.swift */,
 			);
 			path = NetworkingTests;
+			sourceTree = "<group>";
+		};
+		431E937F29966C28009E9E1D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				431E938029966C37009E9E1D /* Data+Append.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,7 +223,9 @@
 				437D508A2989576700C906D4 /* HTTPMethod.swift in Sources */,
 				437D5086298943D900C906D4 /* HTTPNetworkingConfiguration.swift in Sources */,
 				437D508C2989578300C906D4 /* HTTPHeader.swift in Sources */,
+				431E938329966C4D009E9E1D /* MimeType.swift in Sources */,
 				437D50882989462B00C906D4 /* HTTPNetworkingError.swift in Sources */,
+				431E938129966C37009E9E1D /* Data+Append.swift in Sources */,
 				439F906F2992AD0700BCFFD8 /* ProgressThreshold.swift in Sources */,
 				3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */,
 			);

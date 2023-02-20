@@ -1,27 +1,29 @@
 //
-//  CatDetailsDataProvider.swift
+//  MyCatDetailsViewModel.swift
 //  Networking-Example
 //
-//  Created by William Boles on 03/02/2023.
+//  Created by William Boles on 10/02/2023.
 //
 
 import Foundation
 import APIService
 import SwiftUI
 
-enum ImageRetrievalState {
+enum MyCatDetailsImageRetrievalState: Equatable {
     case empty
     case retrieving(_ percentageRetrieved: Double)
     case retrieved(_ image: Image)
     case failed
+    case deleting
 }
 
 @MainActor
-class CatDetailsViewModel: ObservableObject {
+class MyCatDetailsViewModel: ObservableObject {
     private let id: String
     private let service: ImagesEndpointServiceType
     
-    @Published var state: ImageRetrievalState = .empty
+    @Published var state: MyCatDetailsImageRetrievalState = .empty
+    @Published var canDelete: Bool = false
     
     // MARK: - Init
     
@@ -34,6 +36,7 @@ class CatDetailsViewModel: ObservableObject {
     // MARK: - Retrieval
 
     func retrieveImage() async {
+        canDelete = false
         state = .retrieving(0)
         
         let cat = await service.retrieveCat(for: id)
@@ -44,5 +47,13 @@ class CatDetailsViewModel: ObservableObject {
         }
         
         state = .retrieved(image)
+        canDelete = true
+    }
+    
+    // MARK: - Delete
+    
+    func deleteCat() async {
+        canDelete = false
+        await service.deleteCat(id)
     }
 }

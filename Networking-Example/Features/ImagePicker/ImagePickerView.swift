@@ -24,7 +24,7 @@ struct ImagePickerView: View {
                     if let data = try? await selectedItem?.loadTransferable(type: Data.self) {
                         guard let image = UIImage(data: data) else {
                             //TODO: Handle better
-                            fatalError()
+                            fatalError("Can not convert data into an image")
                         }
                        
                         await viewModel.uploadImage(image)

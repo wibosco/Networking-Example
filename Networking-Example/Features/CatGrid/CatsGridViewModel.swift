@@ -27,30 +27,30 @@ class CatsGridDataProvider: ObservableObject {
     func retrieveCats() async {
         retrievingCats = true
         
-        let cats = await service.retrieveCats()
+        let cats = await service.retrieveOthersCats()
         self.viewModels = buildViewModels(from: cats)
         
         retrievingCats = false
     }
     
     func refreshCats() async {
-        let cats = await service.retrieveCats()
+        let cats = await service.retrieveOthersCats()
         self.viewModels = buildViewModels(from: cats)
     }
     
     private func buildViewModels(from cats: [Cat]) -> [CatViewModel] {
-        return cats.map { CatViewModel(id: $0.id, url: $0.url, service: service) }
+        return cats.map { CatViewModel(id: $0.id, url: $0.url) }
     }
 }
 
 @MainActor
-class CatViewModel: ObservableObject {
+class CatViewModel {
     let id: String
     let url: URL
     
     // MARK: - Init
     
-    init(id: String, url: URL, service: ImagesEndpointServiceType) {
+    init(id: String, url: URL) {
         self.id = id
         self.url = url
     }

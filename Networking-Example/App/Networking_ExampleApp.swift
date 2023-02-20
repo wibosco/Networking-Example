@@ -28,16 +28,22 @@ struct Networking_ExampleApp: App {
             
             let gridViewModel = CatsGridDataProvider(service: imageService)
             let imagePickerViewModel = ImagePickerViewModel(service: imageService)
+            let myCatsViewModel = MyCatsViewModel(service: imageService)
             
             TabView {
                 CatsGridView(dataProvider: gridViewModel)
                     .tabItem {
-                        Label("Explore", systemImage: "magnifyingglass.circle")
+                        Label("Explore Cats", systemImage: "magnifyingglass.circle")
                     }
                 
                 ImagePickerView(viewModel: imagePickerViewModel)
                     .tabItem {
-                        Label("Image Picker", systemImage: "photo.circle")
+                        Label("Upload Your Cat", systemImage: "photo.circle")
+                    }
+                
+                MyCatsView(viewModel: myCatsViewModel)
+                    .tabItem {
+                        Label("My Cats", systemImage: "person.crop.circle")
                     }
             }
         }
