@@ -63,9 +63,3 @@ struct MyCatDetailsView: View {
         }
     }
 }
-
-//struct MyCatDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MyCatDetailView()
-//    }
-//}

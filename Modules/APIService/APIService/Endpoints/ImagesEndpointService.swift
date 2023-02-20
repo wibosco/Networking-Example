@@ -22,9 +22,8 @@ public struct CatUploadOutcome: Decodable {
 }
 
 public protocol ImagesEndpointServiceType {
-    func retrieveOthersCats() async -> [Cat]
+    func retrieveExploreCats() async -> [Cat]
     func retrieveCat(for id: String) async -> Cat
-    func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image
     @discardableResult func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome
     func retrieveMyCats() async -> [Cat]
     func deleteCat(_ id: String) async
@@ -78,9 +77,9 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
         }
     }
     
-    // MARK: - Images
+    // MARK: - Explore
     
-    public func retrieveOthersCats() async -> [Cat] {
+    public func retrieveExploreCats() async -> [Cat] {
         let orderQueryItem = URLQueryItem(name: "order", value: Order.random.rawValue)
         let mimeTypeQueryItem = URLQueryItem(name: "mime_types", value: "jpg")
         let limitQueryItem = URLQueryItem(name: "limit", value: "24")
@@ -116,28 +115,7 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
         }
     }
     
-    // MARK: - Image
-    
-    public func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image {
-        do {
-            let data = try await networkingClient.downloadData(url: url,
-                                                               progressThreshold: .everyTwenty,
-                                                               progressUpdateHandler: { percentageRetrieved in
-                progressUpdateHandler?(percentageRetrieved)
-            })
-            
-            guard let uiImage = UIImage(data: data) else {
-                //TODO: Handle better
-                fatalError()
-            }
-            
-            let image = Image(uiImage: uiImage)
-            return image
-        } catch let error {
-            //TODO: Handle better
-            fatalError(error.localizedDescription)
-        }
-    }
+    // MARK: - Upload
     
     @discardableResult public func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome {
         do {

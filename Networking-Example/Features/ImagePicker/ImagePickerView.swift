@@ -36,12 +36,3 @@ struct ImagePickerView: View {
         }
     }
 }
-
-//struct ImagePickerView_Previews: PreviewProvider {
-//    @State private var selectedItem: PhotosPickerItem?
-//
-//
-//    static var previews: some View {
-//        ImagePickerView()
-//    }
-//}

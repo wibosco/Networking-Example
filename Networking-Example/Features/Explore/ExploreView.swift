@@ -8,31 +8,30 @@
 import SwiftUI
 import APIService
 
-struct CatsGridView: View {
-    @StateObject var dataProvider: CatsGridDataProvider
+struct ExploreView: View {
+    @StateObject var viewModel: ExploreViewModel
     
     // MARK: - View
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
+
     
     var body: some View {
         NavigationStack {
             VStack {
-                if dataProvider.retrievingCats {
+                switch viewModel.state {
+                case .empty:
+                    Text("You haven't uploaded any cats")
+                case .retrieving:
                     ProgressView("Loading Cats...")
-                } else {
+                case .retrieved(let viewModels):
                     GeometryReader { geometryReader in
+                        let columns = GridItem.threeFlexibleColumns()
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(dataProvider.viewModels, id: \.id) { catViewModel in
+                                ForEach(viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let detailsViewModel = CatDetailsViewModel(id: catViewModel.id,
-                                                                                   service: dataProvider.service)
+                                        let detailsViewModel = viewModel.detailsViewModel(for: catViewModel.id)
                                         CatDetailsView(viewModel: detailsViewModel)
                                     } label: {
                                         CatImageCell(viewModel: catViewModel)
@@ -42,16 +41,19 @@ struct CatsGridView: View {
                             }
                         }
                     }
+                case .failed:
+                    //TODO: Implement failed image
+                    EmptyView()
                 }
             }
             .padding()
             .navigationTitle("Explore")
         }
         .task {
-            await dataProvider.retrieveCats()
+            await viewModel.retrieveCats()
         }
         .refreshable {
-            await dataProvider.refreshCats()
+            await viewModel.refreshCats()
         }
     }
 }
@@ -77,9 +79,3 @@ struct CatImageCell: View {
         }
     }
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

@@ -31,14 +31,15 @@ struct CatDetailsView: View {
                 EmptyView()
             }
         }
+        .toolbar {
+            Button("Favourite") {
+                
+            }
+            .tint(.yellow)
+            
+        }
         .task {
             await viewModel.retrieveImage()
         }
     }
 }
-
-//struct CatDetailsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CatDetailsView()
-//    }
-//}

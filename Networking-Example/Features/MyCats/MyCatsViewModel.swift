@@ -18,14 +18,14 @@ enum MyCatsState {
 
 @MainActor
 class MyCatsViewModel: ObservableObject {
-    let service: ImagesEndpointServiceType
-    
     @Published var state: MyCatsState = .empty
     
+    private let dependencies: DependencyContainer
+
     // MARK: - Init
     
-    init(service: ImagesEndpointServiceType) {
-        self.service = service
+    init(dependencies: DependencyContainer) {
+        self.dependencies = dependencies
     }
     
     // MARK: - Retrieval
@@ -33,14 +33,14 @@ class MyCatsViewModel: ObservableObject {
     func retrieveCats() async {
         state = .retrieving
         
-        let cats = await service.retrieveMyCats()
+        let cats = await dependencies.imagesService.retrieveMyCats()
         let viewModels = buildViewModels(from: cats)
         
         state = .retrieved(viewModels)
     }
     
     func refreshCats() async {
-        let cats = await service.retrieveMyCats()
+        let cats = await dependencies.imagesService.retrieveMyCats()
         let viewModels = buildViewModels(from: cats)
         
         state = .retrieved(viewModels)
@@ -48,6 +48,16 @@ class MyCatsViewModel: ObservableObject {
     
     private func buildViewModels(from cats: [Cat]) -> [MyCatViewModel] {
         return cats.map { MyCatViewModel(id: $0.id, url: $0.url) }
+    }
+    
+    // MARK: - Details
+    
+    func detailsViewModel(for id: String) -> MyCatDetailsViewModel
+    {
+        let viewModel = MyCatDetailsViewModel(id: id,
+                                              dependencies: dependencies)
+        
+        return viewModel
     }
 }
 
