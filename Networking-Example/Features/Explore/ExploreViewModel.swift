@@ -10,16 +10,16 @@ import APIService
 import SwiftUI
 
 @MainActor
-class CatsGridDataProvider: ObservableObject {
+class ExploreViewModel: ObservableObject {
     @Published var viewModels: [CatViewModel] = []
     @Published var retrievingCats: Bool = false
     
-    let service: ImagesEndpointServiceType //TODO: Should be private or an environment var
+    private let dependencies: DependencyContainer
     
     // MARK: - Init
     
-    init(service: ImagesEndpointServiceType) {
-        self.service = service
+    init(dependencies: DependencyContainer) {
+        self.dependencies = dependencies
     }
     
     // MARK: - Retrieval
@@ -27,19 +27,28 @@ class CatsGridDataProvider: ObservableObject {
     func retrieveCats() async {
         retrievingCats = true
         
-        let cats = await service.retrieveOthersCats()
+        let cats = await dependencies.imagesService.retrieveOthersCats()
         self.viewModels = buildViewModels(from: cats)
         
         retrievingCats = false
     }
     
     func refreshCats() async {
-        let cats = await service.retrieveOthersCats()
+        let cats = await dependencies.imagesService.retrieveOthersCats()
         self.viewModels = buildViewModels(from: cats)
     }
     
     private func buildViewModels(from cats: [Cat]) -> [CatViewModel] {
         return cats.map { CatViewModel(id: $0.id, url: $0.url) }
+    }
+    
+    // MARK: - CatDetails
+    
+    func detailsViewModel(for id: String) -> CatDetailsViewModel {
+        let viewModel = CatDetailsViewModel(id: id,
+                                            dependencies: dependencies)
+        
+        return viewModel
     }
 }
 

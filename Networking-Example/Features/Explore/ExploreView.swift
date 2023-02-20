@@ -8,8 +8,8 @@
 import SwiftUI
 import APIService
 
-struct CatsGridView: View {
-    @StateObject var dataProvider: CatsGridDataProvider
+struct ExploreView: View {
+    @StateObject var viewModel: ExploreViewModel
     
     // MARK: - View
     
@@ -22,17 +22,16 @@ struct CatsGridView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if dataProvider.retrievingCats {
+                if viewModel.retrievingCats {
                     ProgressView("Loading Cats...")
                 } else {
                     GeometryReader { geometryReader in
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(dataProvider.viewModels, id: \.id) { catViewModel in
+                                ForEach(viewModel.viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let detailsViewModel = CatDetailsViewModel(id: catViewModel.id,
-                                                                                   service: dataProvider.service)
+                                        let detailsViewModel = viewModel.detailsViewModel(for: catViewModel.id)
                                         CatDetailsView(viewModel: detailsViewModel)
                                     } label: {
                                         CatImageCell(viewModel: catViewModel)
@@ -48,10 +47,10 @@ struct CatsGridView: View {
             .navigationTitle("Explore")
         }
         .task {
-            await dataProvider.retrieveCats()
+            await viewModel.retrieveCats()
         }
         .refreshable {
-            await dataProvider.refreshCats()
+            await viewModel.refreshCats()
         }
     }
 }
@@ -77,9 +76,3 @@ struct CatImageCell: View {
         }
     }
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

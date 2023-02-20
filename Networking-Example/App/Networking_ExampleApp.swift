@@ -11,27 +11,18 @@ import APIService
 
 @main
 struct Networking_ExampleApp: App {
+    let dependencyContainer: DependencyContainer = {
+        return DependencyContainer()
+    }()
+    
     var body: some Scene {
         WindowGroup {
-            let defaultHeaders = HTTPHeader.defaultHeaders()
-            let clientIDHeader = HTTPHeader(field: "x-api-key", value: "live_0PkFk40eBl9BPuHy6MYNcZtOLujI9DK5ROGrxQhm4Qo6u3M5Ozv40yreJhmgds7w")
-            let headers = (defaultHeaders + [clientIDHeader])
-            
-            let config = HTTPNetworkingConfiguration(scheme: "https",
-                                                     host: "api.thecatapi.com",
-                                                     defaultHeaders: headers)
-            
-            let networkingClient = HTTPNetworkingClient(urlSession: URLSession.shared,
-                                                        config: config)
-            
-            let imageService = ImagesEndpointService(networkingClient: networkingClient)
-            
-            let gridViewModel = CatsGridDataProvider(service: imageService)
-            let imagePickerViewModel = ImagePickerViewModel(service: imageService)
-            let myCatsViewModel = MyCatsViewModel(service: imageService)
+            let exploreViewModel = ExploreViewModel(dependencies: dependencyContainer)
+            let imagePickerViewModel = ImagePickerViewModel(dependencies: dependencyContainer)
+            let myCatsViewModel = MyCatsViewModel(dependencies: dependencyContainer)
             
             TabView {
-                CatsGridView(dataProvider: gridViewModel)
+                ExploreView(viewModel: exploreViewModel)
                     .tabItem {
                         Label("Explore Cats", systemImage: "magnifyingglass.circle")
                     }

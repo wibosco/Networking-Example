@@ -13,6 +13,7 @@
 		43558E882990F48300538EDC /* ImagesEndpointService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43558E872990F48300538EDC /* ImagesEndpointService.swift */; };
 		4373E19E299062F20021B8D4 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4373E19D299062F20021B8D4 /* Networking.framework */; };
 		4373E19F299062F20021B8D4 /* Networking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4373E19D299062F20021B8D4 /* Networking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		43A6B58D29998A27001F0CC8 /* FavouritesEndpointService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A6B58C29998A27001F0CC8 /* FavouritesEndpointService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		433C2EFC298BCDA5009C7B10 /* APIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceTests.swift; sourceTree = "<group>"; };
 		43558E872990F48300538EDC /* ImagesEndpointService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesEndpointService.swift; sourceTree = "<group>"; };
 		4373E19D299062F20021B8D4 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43A6B58C29998A27001F0CC8 /* FavouritesEndpointService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesEndpointService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				43558E872990F48300538EDC /* ImagesEndpointService.swift */,
+				43A6B58C29998A27001F0CC8 /* FavouritesEndpointService.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43A6B58D29998A27001F0CC8 /* FavouritesEndpointService.swift in Sources */,
 				433C2EF2298BCDA5009C7B10 /* APIService.docc in Sources */,
 				43558E882990F48300538EDC /* ImagesEndpointService.swift in Sources */,
 			);

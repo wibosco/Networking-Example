@@ -33,8 +33,7 @@ struct MyCatsView: View {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
                                 ForEach(viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
-                                        let detailsViewModel = MyCatDetailsViewModel(id: catViewModel.id,
-                                                                                     service: viewModel.service)
+                                        let detailsViewModel = viewModel.detailsViewModel(for: catViewModel.id)
                                         MyCatDetailsView(viewModel: detailsViewModel)
                                     } label: {
                                         MyCatImageCell(viewModel: catViewModel)
@@ -84,9 +83,3 @@ struct MyCatImageCell: View {
         }
     }
 }
-
-//struct MyCatsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MyCatsView()
-//    }
-//}

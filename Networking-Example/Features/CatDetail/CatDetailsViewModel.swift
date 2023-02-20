@@ -18,31 +18,37 @@ enum ImageRetrievalState {
 
 @MainActor
 class CatDetailsViewModel: ObservableObject {
-    private let id: String
-    private let service: ImagesEndpointServiceType
-    
     @Published var state: ImageRetrievalState = .empty
     
+    private let id: String
+    private let dependencies: DependencyContainer
+
     // MARK: - Init
     
     init(id: String,
-         service: ImagesEndpointServiceType) {
+        dependencies: DependencyContainer) {
         self.id = id
-        self.service = service
+        self.dependencies = dependencies
     }
     
     // MARK: - Retrieval
-
+    
     func retrieveImage() async {
         state = .retrieving(0)
         
-        let cat = await service.retrieveCat(for: id)
-        let image = await service.retrieveImage(from: cat.url) { percentageRetrieved in
+        let cat = await dependencies.imagesService.retrieveCat(for: id)
+        let image = await dependencies.imagesService.retrieveImage(from: cat.url) { percentageRetrieved in
             Task {
                 self.state = .retrieving(percentageRetrieved)
             }
         }
         
         state = .retrieved(image)
+    }
+    
+    // MARK: - Favourite
+    
+    func favourite() async {
+        _ = await dependencies.favouritesService.favourite(id: id)
     }
 }

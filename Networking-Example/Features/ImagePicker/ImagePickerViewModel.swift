@@ -16,21 +16,21 @@ enum ImageUploadState {
 
 @MainActor
 class ImagePickerViewModel: ObservableObject {
-    private let service: ImagesEndpointServiceType
-    
     @Published var state: ImageUploadState = .ready
     
+    private let dependencies: DependencyContainer
+
     // MARK: - Init
     
-    init(service: ImagesEndpointServiceType) {
-        self.service = service
+    init(dependencies: DependencyContainer) {
+        self.dependencies = dependencies
     }
     
     // MARK: - Upload
     
     func uploadImage(_ image: UIImage) async {
         state = .uploading
-        await service.uploadCatImage(image)
+        await dependencies.imagesService.uploadCatImage(image)
         state = .ready
     }
 }
