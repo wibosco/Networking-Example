@@ -9,10 +9,16 @@ import Foundation
 import APIService
 import SwiftUI
 
+enum ExploreState {
+    case empty
+    case retrieving
+    case retrieved(_ viewModels: [CatViewModel])
+    case failed
+}
+
 @MainActor
 class ExploreViewModel: ObservableObject {
-    @Published var viewModels: [CatViewModel] = []
-    @Published var retrievingCats: Bool = false
+    @Published var state: ExploreState = .empty
     
     private let dependencies: DependencyContainer
     
@@ -25,17 +31,19 @@ class ExploreViewModel: ObservableObject {
     // MARK: - Retrieval
     
     func retrieveCats() async {
-        retrievingCats = true
+        state = .retrieving
         
-        let cats = await dependencies.imagesService.retrieveOthersCats()
-        self.viewModels = buildViewModels(from: cats)
+        let cats = await dependencies.imagesService.retrieveExploreCats()
+        let viewModels = buildViewModels(from: cats)
         
-        retrievingCats = false
+        state = .retrieved(viewModels)
     }
     
     func refreshCats() async {
-        let cats = await dependencies.imagesService.retrieveOthersCats()
-        self.viewModels = buildViewModels(from: cats)
+        let cats = await dependencies.imagesService.retrieveExploreCats()
+        let viewModels = buildViewModels(from: cats)
+        
+        state = .retrieved(viewModels)
     }
     
     private func buildViewModels(from cats: [Cat]) -> [CatViewModel] {

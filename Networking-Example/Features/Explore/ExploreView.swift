@@ -13,23 +13,23 @@ struct ExploreView: View {
     
     // MARK: - View
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
+
     
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.retrievingCats {
+                switch viewModel.state {
+                case .empty:
+                    Text("You haven't uploaded any cats")
+                case .retrieving:
                     ProgressView("Loading Cats...")
-                } else {
+                case .retrieved(let viewModels):
                     GeometryReader { geometryReader in
+                        let columns = GridItem.threeFlexibleColumns()
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {
-                                ForEach(viewModel.viewModels, id: \.id) { catViewModel in
+                                ForEach(viewModels, id: \.id) { catViewModel in
                                     NavigationLink {
                                         let detailsViewModel = viewModel.detailsViewModel(for: catViewModel.id)
                                         CatDetailsView(viewModel: detailsViewModel)
@@ -41,6 +41,9 @@ struct ExploreView: View {
                             }
                         }
                     }
+                case .failed:
+                    //TODO: Implement failed image
+                    EmptyView()
                 }
             }
             .padding()

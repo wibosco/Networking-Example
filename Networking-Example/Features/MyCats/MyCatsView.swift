@@ -12,12 +12,6 @@ struct MyCatsView: View {
     
     // MARK: - View
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -28,6 +22,7 @@ struct MyCatsView: View {
                     ProgressView("Loading Cats...")
                 case .retrieved(let viewModels):
                     GeometryReader { geometryReader in
+                        let columns = GridItem.threeFlexibleColumns()
                         let sideLength = geometryReader.size.width / CGFloat(columns.count)
                         ScrollView {
                             LazyVGrid(columns: columns, alignment: .center, spacing: 4) {

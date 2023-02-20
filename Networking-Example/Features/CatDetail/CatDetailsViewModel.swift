@@ -37,7 +37,7 @@ class CatDetailsViewModel: ObservableObject {
         state = .retrieving(0)
         
         let cat = await dependencies.imagesService.retrieveCat(for: id)
-        let image = await dependencies.imagesService.retrieveImage(from: cat.url) { percentageRetrieved in
+        let image = await dependencies.assetService.retrieveImage(from: cat.url) { percentageRetrieved in
             Task {
                 self.state = .retrieving(percentageRetrieved)
             }

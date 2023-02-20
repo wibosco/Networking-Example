@@ -13,6 +13,7 @@ final class DependencyContainer {
     let networkingClient: HTTPNetworkingClientType
     let imagesService: ImagesEndpointServiceType
     let favouritesService: FavouritesEndpointServiceType
+    let assetService: AssetServiceType
     
     // MARK: - Setup
     
@@ -21,6 +22,7 @@ final class DependencyContainer {
         
         self.imagesService = DependencyContainer.setUpImagesService(networkingClient: networkingClient)
         self.favouritesService = DependencyContainer.setUpFavouritesService(networkingClient: networkingClient)
+        self.assetService = DependencyContainer.setUpAssetService(networkingClient: networkingClient)
     }
     
     // MARK: - Networking
@@ -52,5 +54,11 @@ final class DependencyContainer {
         let favouritesService = FavouritesEndpointService(networkingClient: networkingClient)
         
         return favouritesService
+    }
+    
+    static func setUpAssetService(networkingClient: HTTPNetworkingClientType) -> AssetServiceType {
+        let assetService = AssetService(networkingClient: networkingClient)
+        
+        return assetService
     }
 }
