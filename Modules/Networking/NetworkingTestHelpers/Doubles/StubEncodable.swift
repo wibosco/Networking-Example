@@ -7,12 +7,16 @@
 
 import Foundation
 
-public struct StubEncodable: Encodable {
-    let name: String
+public struct StubEncodable: Encodable, Equatable {
+    public let name: String
     
     // MARK: - Init
     
-    init() {
+    public init(name: String) {
+        self.name = name
+    }
+    
+    public init() {
         name = "Stub Encodable"
     }
 }

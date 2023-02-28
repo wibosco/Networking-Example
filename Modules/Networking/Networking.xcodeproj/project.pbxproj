@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3DD8962D2983FCF300414419 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD896242983FCF100414419 /* Networking.framework */; };
-		3DD896322983FCF300414419 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD896312983FCF300414419 /* NetworkingTests.swift */; };
 		3DD8963D2984005600414419 /* HTTPNetworkingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */; };
 		431E938129966C37009E9E1D /* Data+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431E938029966C37009E9E1D /* Data+Append.swift */; };
 		431E938329966C4D009E9E1D /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431E938229966C4D009E9E1D /* MimeType.swift */; };
@@ -21,6 +20,11 @@
 		439AFD2229ACD39B00FAC260 /* StubHTTPNetworkingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439AFD1F29ACD39B00FAC260 /* StubHTTPNetworkingClient.swift */; };
 		439AFD2329ACD39B00FAC260 /* StubDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439AFD2029ACD39B00FAC260 /* StubDecodable.swift */; };
 		439F906F2992AD0700BCFFD8 /* ProgressThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */; };
+		43AD2E4D29AE1CCA00D68675 /* HTTPNetworkingClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AD2E4C29AE1CCA00D68675 /* HTTPNetworkingClientTests.swift */; };
+		43AD2E5029AE1E2300D68675 /* StubURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AD2E4F29AE1E2300D68675 /* StubURLSession.swift */; };
+		43AD2E5429AE2DC000D68675 /* StubDecodable.json in Resources */ = {isa = PBXBuildFile; fileRef = 43AD2E5329AE2DC000D68675 /* StubDecodable.json */; };
+		43AD2E5729AE2E1B00D68675 /* Bundle+Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AD2E5629AE2E1B00D68675 /* Bundle+Load.swift */; };
+		43AD2E5929AE413A00D68675 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD896242983FCF100414419 /* Networking.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +40,6 @@
 /* Begin PBXFileReference section */
 		3DD896242983FCF100414419 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DD8962C2983FCF300414419 /* NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3DD896312983FCF300414419 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 		3DD8963C2984005600414419 /* HTTPNetworkingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingClient.swift; sourceTree = "<group>"; };
 		431E938029966C37009E9E1D /* Data+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Append.swift"; sourceTree = "<group>"; };
 		431E938229966C4D009E9E1D /* MimeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
@@ -50,6 +53,10 @@
 		439AFD1F29ACD39B00FAC260 /* StubHTTPNetworkingClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubHTTPNetworkingClient.swift; sourceTree = "<group>"; };
 		439AFD2029ACD39B00FAC260 /* StubDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StubDecodable.swift; sourceTree = "<group>"; };
 		439F906E2992AD0700BCFFD8 /* ProgressThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressThreshold.swift; sourceTree = "<group>"; };
+		43AD2E4C29AE1CCA00D68675 /* HTTPNetworkingClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPNetworkingClientTests.swift; sourceTree = "<group>"; };
+		43AD2E4F29AE1E2300D68675 /* StubURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubURLSession.swift; sourceTree = "<group>"; };
+		43AD2E5329AE2DC000D68675 /* StubDecodable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StubDecodable.json; sourceTree = "<group>"; };
+		43AD2E5629AE2E1B00D68675 /* Bundle+Load.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Load.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AD2E5929AE413A00D68675 /* Networking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +93,7 @@
 				3DD896302983FCF300414419 /* NetworkingTests */,
 				439AFCFE29ACC0C700FAC260 /* NetworkingTestHelpers */,
 				3DD896252983FCF100414419 /* Products */,
+				43AD2E5829AE413A00D68675 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -116,7 +125,8 @@
 		3DD896302983FCF300414419 /* NetworkingTests */ = {
 			isa = PBXGroup;
 			children = (
-				3DD896312983FCF300414419 /* NetworkingTests.swift */,
+				43AD2E4E29AE1E0B00D68675 /* Doubles */,
+				43AD2E4929AE1C9900D68675 /* Tests */,
 			);
 			path = NetworkingTests;
 			sourceTree = "<group>";
@@ -132,6 +142,7 @@
 		439AFCFE29ACC0C700FAC260 /* NetworkingTestHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				43AD2E5529AE2E0B00D68675 /* Extension */,
 				439AFD1D29ACD39B00FAC260 /* Doubles */,
 				439AFD0029ACC0C700FAC260 /* NetworkingTestHelpers.docc */,
 			);
@@ -141,11 +152,43 @@
 		439AFD1D29ACD39B00FAC260 /* Doubles */ = {
 			isa = PBXGroup;
 			children = (
+				43AD2E5329AE2DC000D68675 /* StubDecodable.json */,
 				439AFD1E29ACD39B00FAC260 /* StubEncodable.swift */,
 				439AFD1F29ACD39B00FAC260 /* StubHTTPNetworkingClient.swift */,
 				439AFD2029ACD39B00FAC260 /* StubDecodable.swift */,
 			);
 			path = Doubles;
+			sourceTree = "<group>";
+		};
+		43AD2E4929AE1C9900D68675 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				43AD2E4C29AE1CCA00D68675 /* HTTPNetworkingClientTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		43AD2E4E29AE1E0B00D68675 /* Doubles */ = {
+			isa = PBXGroup;
+			children = (
+				43AD2E4F29AE1E2300D68675 /* StubURLSession.swift */,
+			);
+			path = Doubles;
+			sourceTree = "<group>";
+		};
+		43AD2E5529AE2E0B00D68675 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				43AD2E5629AE2E1B00D68675 /* Bundle+Load.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		43AD2E5829AE413A00D68675 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,6 +326,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AD2E5429AE2DC000D68675 /* StubDecodable.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +352,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DD896322983FCF300414419 /* NetworkingTests.swift in Sources */,
+				43AD2E4D29AE1CCA00D68675 /* HTTPNetworkingClientTests.swift in Sources */,
+				43AD2E5029AE1E2300D68675 /* StubURLSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +363,7 @@
 			files = (
 				439AFD2129ACD39B00FAC260 /* StubEncodable.swift in Sources */,
 				439AFD2329ACD39B00FAC260 /* StubDecodable.swift in Sources */,
+				43AD2E5729AE2E1B00D68675 /* Bundle+Load.swift in Sources */,
 				439AFD2229ACD39B00FAC260 /* StubHTTPNetworkingClient.swift in Sources */,
 				439AFD0129ACC0C700FAC260 /* NetworkingTestHelpers.docc in Sources */,
 			);
@@ -391,6 +437,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -447,6 +494,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -525,6 +573,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamboles.NetworkingTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -541,6 +592,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamboles.NetworkingTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -559,7 +613,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -569,6 +623,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamboles.NetworkingTestHelpers;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -587,7 +644,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -597,6 +654,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.williamboles.NetworkingTestHelpers;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

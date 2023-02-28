@@ -7,10 +7,14 @@
 
 import Foundation
 
-public struct StubDecodable: Decodable {
+public struct StubDecodable: Decodable, Equatable {
     public let name: String
     
     // MARK: - Init
+    
+    public init(name: String) {
+        self.name = name
+    }
     
     public init() {
         name = "Stub Decodable"
