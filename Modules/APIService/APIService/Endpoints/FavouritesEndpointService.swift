@@ -8,7 +8,7 @@
 import Foundation
 import Networking
 
-public struct FavouriteOutcome: Decodable {
+public struct FavouriteOutcome: Decodable, Equatable {
     let id: String
     let message: String
 }
@@ -17,7 +17,7 @@ public protocol FavouritesEndpointServiceType {
     @discardableResult func favourite(id: String) async -> FavouriteOutcome 
 }
 
-private struct FavouriteBody: Encodable {
+struct FavouriteBody: Encodable, Equatable {
     let id: String
     
     enum CodingKeys: String, CodingKey {

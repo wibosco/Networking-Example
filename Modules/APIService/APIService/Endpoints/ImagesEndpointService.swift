@@ -9,12 +9,12 @@ import Foundation
 import Networking
 import SwiftUI
 
-public struct Cat: Decodable {
+public struct Cat: Decodable, Equatable {
     public let id: String
     public let url: URL
 }
 
-public struct CatUploadOutcome: Decodable {
+public struct CatUploadOutcome: Decodable, Equatable {
     public let id: String
     public let url: URL
     public let pending: Int
@@ -36,7 +36,7 @@ private enum Order: String {
 }
 
 public class ImagesEndpointService: ImagesEndpointServiceType {
-    let networkingClient: HTTPNetworkingClientType
+    private let networkingClient: HTTPNetworkingClientType
     
     // MARK: - Init
     

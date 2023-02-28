@@ -25,6 +25,7 @@
 		437601B0299D4C3100F6C581 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437601AE299D4C3100F6C581 /* ExploreView.swift */; };
 		437601B1299D4C3100F6C581 /* ExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437601AF299D4C3100F6C581 /* ExploreViewModel.swift */; };
 		438A533629A382E600D14E24 /* GridItem+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438A533529A382E600D14E24 /* GridItem+Layout.swift */; };
+		43AD2E4629AE0CAB00D68675 /* AssetDownloadService+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AD2E4529AE0CAB00D68675 /* AssetDownloadService+Image.swift */; };
 		43F4EA00298D58F200E72F4C /* CatDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4E9FF298D58F200E72F4C /* CatDetailsView.swift */; };
 		43F4EA02298D595600E72F4C /* CatDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4EA01298D595600E72F4C /* CatDetailsViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -83,6 +84,7 @@
 		437601AF299D4C3100F6C581 /* ExploreViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreViewModel.swift; sourceTree = "<group>"; };
 		437D509129895FC700C906D4 /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		438A533529A382E600D14E24 /* GridItem+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GridItem+Layout.swift"; sourceTree = "<group>"; };
+		43AD2E4529AE0CAB00D68675 /* AssetDownloadService+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssetDownloadService+Image.swift"; sourceTree = "<group>"; };
 		43F4E9FF298D58F200E72F4C /* CatDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsView.swift; sourceTree = "<group>"; };
 		43F4EA01298D595600E72F4C /* CatDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDetailsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +143,7 @@
 				433C2F19298BDC9F009C7B10 /* App */,
 				438A533429A382D000D14E24 /* Extensions */,
 				433C2F1B298BDC9F009C7B10 /* Features */,
+				43AD2E4429AE0C9100D68675 /* Networking */,
 				433C2F21298BDD6D009C7B10 /* Resources */,
 			);
 			path = "Networking-Example";
@@ -252,6 +255,14 @@
 				438A533529A382E600D14E24 /* GridItem+Layout.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		43AD2E4429AE0C9100D68675 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				43AD2E4529AE0CAB00D68675 /* AssetDownloadService+Image.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		43F4E9FE298D58D500E72F4C /* CatDetail */ = {
@@ -402,6 +413,7 @@
 				43F4EA00298D58F200E72F4C /* CatDetailsView.swift in Sources */,
 				431E937C29965547009E9E1D /* MyCatDetailsView.swift in Sources */,
 				433C2F1E298BDC9F009C7B10 /* Networking_ExampleApp.swift in Sources */,
+				43AD2E4629AE0CAB00D68675 /* AssetDownloadService+Image.swift in Sources */,
 				438A533629A382E600D14E24 /* GridItem+Layout.swift in Sources */,
 				43023D0C2993BE0100E420C2 /* ImagePickerView.swift in Sources */,
 				431E937729964F64009E9E1D /* MyCatsView.swift in Sources */,
@@ -579,6 +591,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.williamboles.Networking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -607,6 +622,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.williamboles.Networking-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

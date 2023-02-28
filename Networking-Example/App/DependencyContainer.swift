@@ -13,7 +13,7 @@ final class DependencyContainer {
     let networkingClient: HTTPNetworkingClientType
     let imagesService: ImagesEndpointServiceType
     let favouritesService: FavouritesEndpointServiceType
-    let assetService: AssetServiceType
+    let assetService: AssetDownloadServiceType
     
     // MARK: - Setup
     
@@ -56,8 +56,8 @@ final class DependencyContainer {
         return favouritesService
     }
     
-    static func setUpAssetService(networkingClient: HTTPNetworkingClientType) -> AssetServiceType {
-        let assetService = AssetService(networkingClient: networkingClient)
+    static func setUpAssetService(networkingClient: HTTPNetworkingClientType) -> AssetDownloadServiceType {
+        let assetService = AssetDownloadService(networkingClient: networkingClient)
         
         return assetService
     }

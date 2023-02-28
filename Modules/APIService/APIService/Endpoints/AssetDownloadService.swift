@@ -7,14 +7,13 @@
 
 import Foundation
 import Networking
-import SwiftUI
 
-public protocol AssetServiceType {
-    func retrieveImage(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Image
+public protocol AssetDownloadServiceType {
+    func retrieveData(from url: URL, progressUpdateHandler: ((Double) -> ())?) async -> Data
 }
 
 
-public class AssetService: AssetServiceType {
+public class AssetDownloadService: AssetDownloadServiceType {
     let networkingClient: HTTPNetworkingClientType
     
     // MARK: - Init
@@ -25,8 +24,8 @@ public class AssetService: AssetServiceType {
     
     // MARK: - Image
     
-    public func retrieveImage(from url: URL,
-                              progressUpdateHandler: ((Double) -> ())?) async -> Image {
+    public func retrieveData(from url: URL,
+                             progressUpdateHandler: ((Double) -> ())?) async -> Data {
         do {
             let data = try await networkingClient.downloadData(url: url,
                                                                progressThreshold: .everyTwenty,
@@ -34,13 +33,7 @@ public class AssetService: AssetServiceType {
                 progressUpdateHandler?(percentageRetrieved)
             })
             
-            guard let uiImage = UIImage(data: data) else {
-                //TODO: Handle better
-                fatalError()
-            }
-            
-            let image = Image(uiImage: uiImage)
-            return image
+           return data
         } catch let error {
             //TODO: Handle better
             fatalError(error.localizedDescription)
