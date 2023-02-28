@@ -16,8 +16,8 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Runs unit tests"
-  lane :run_unit_tests do
+  desc "Runs tests"
+  lane :run_all_tests do
     run_tests(
       workspace: "Networking-Example.xcworkspace",
       scheme: "Networking-Example",

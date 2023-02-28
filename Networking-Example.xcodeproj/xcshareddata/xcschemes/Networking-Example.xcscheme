@@ -40,17 +40,6 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "YES"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3D1E3C002983DCB900B2BFAB"
-               BuildableName = "Networking-ExampleUITests.xctest"
-               BlueprintName = "Networking-ExampleUITests"
-               ReferencedContainer = "container:Networking-Example.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
