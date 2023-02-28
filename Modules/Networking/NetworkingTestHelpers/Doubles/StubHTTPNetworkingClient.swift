@@ -16,7 +16,6 @@ public class StubHTTPNetworkingClient<P: Decodable, T: Encodable>: HTTPNetworkin
     public var downloadDataClosure: ((URL, ProgressThreshold, ((Double) -> ())?) -> (Data))!
     
     public var postFileClosure: ((String, Data, MimeType, [HTTPHeader]?, ResponseDecoder) -> (P))!
-    public var postImageClosure: ((String, UIImage, [HTTPHeader]?, ResponseDecoder) -> (P))!
     public var postJSONClosure: ((String, T, [HTTPHeader]?) -> (P))!
     
     public var deleteClosure: ((String, [URLQueryItem]?, [HTTPHeader]?) ->())!
@@ -37,10 +36,6 @@ public class StubHTTPNetworkingClient<P: Decodable, T: Encodable>: HTTPNetworkin
     
     public func postFile<D>(path: String, data: Data, mimeType: MimeType, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> D where D : Decodable {
         postFileClosure(path, data, mimeType, headers, decoder) as! D
-    }
-    
-    public func postImage<D>(path: String, image: UIImage, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> D where D : Decodable {
-        postImageClosure(path, image, headers, decoder) as! D
     }
     
     public func postJSON<D, E>(path: String, body: E, headers: [HTTPHeader]?) async throws -> D where D : Decodable, E : Encodable {

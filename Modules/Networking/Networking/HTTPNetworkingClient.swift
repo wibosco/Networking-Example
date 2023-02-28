@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 public protocol HTTPNetworkingClientType {
     func get<D: Decodable>(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> D
@@ -15,7 +14,6 @@ public protocol HTTPNetworkingClientType {
     func downloadData(url: URL, progressThreshold: ProgressThreshold, progressUpdateHandler: ((Double) -> ())?) async throws -> Data
     
     func postFile<D: Decodable>(path: String, data: Data, mimeType: MimeType, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> D
-    func postImage<D: Decodable>(path: String, image: UIImage, headers: [HTTPHeader]?, decoder: ResponseDecoder) async throws -> D
     func postJSON<D: Decodable, E: Encodable>(path: String, body: E, headers: [HTTPHeader]?) async throws -> D
     
     func delete(path: String, queryItems: [URLQueryItem]?, headers: [HTTPHeader]?) async throws
@@ -291,24 +289,6 @@ public final class HTTPNetworkingClient: HTTPNetworkingClientType {
                                                        mimeType: mimeType,
                                                        headers: headers,
                                                        decoder: decoder)
-        
-        return result
-    }
-    
-    public func postImage<D: Decodable>(path: String,
-                                        image: UIImage,
-                                        headers: [HTTPHeader]?,
-                                        decoder: ResponseDecoder) async throws -> D {
-        guard let data = image.jpegData(compressionQuality: 1.0) else {
-            //TODO: Handle better
-            fatalError("Can not convery image to a jpeg")
-        }
-        
-        let result: D = try await postFile(path: path,
-                                           data: data,
-                                           mimeType: .jpeg,
-                                           headers: headers,
-                                           decoder: decoder)
         
         return result
     }

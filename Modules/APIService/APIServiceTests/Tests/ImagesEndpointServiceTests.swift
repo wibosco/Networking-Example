@@ -143,12 +143,13 @@ final class ImagesEndpointServiceTests: XCTestCase {
         
         let outcomeToBeReturned = CatUploadOutcome.testData()
         
-        let imageToBeUploaded = UIImage.fromColor()
+        let dataToBeUploaded = "Test Data".data(using: .utf8)!
         
         let expectation = expectation(description: "networking expectation")
-        networkingClient.postImageClosure = { (path, image, headers, decoder) in
+        networkingClient.postFileClosure = { (path, data, mimeType, headers, decoder) in
             XCTAssertEqual(path, "/v1/images/upload")
-            XCTAssertEqual(image, imageToBeUploaded)
+            XCTAssertEqual(data, dataToBeUploaded)
+            XCTAssertEqual(mimeType, .jpeg)
             XCTAssertNil(headers)
             XCTAssertTrue(decoder is JSONDecoder)
             
@@ -157,7 +158,7 @@ final class ImagesEndpointServiceTests: XCTestCase {
             return outcomeToBeReturned
         }
         
-        let outcome = await sut.uploadCatImage(imageToBeUploaded)
+        let outcome = await sut.uploadCatData(dataToBeUploaded, mimeType: .jpeg)
         
         await waitForExpectations(timeout: 3)
         

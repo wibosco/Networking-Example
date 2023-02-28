@@ -10,8 +10,8 @@ import APIService
 import SwiftUI
 
 extension AssetDownloadServiceType {
-    public func retrieveImage(from url: URL,
-                              progressUpdateHandler: ((Double) -> ())?) async -> Image {
+    func retrieveImage(from url: URL,
+                       progressUpdateHandler: ((Double) -> ())?) async -> Image {
         let data = await retrieveData(from: url, progressUpdateHandler: progressUpdateHandler)
         
         guard let uiImage = UIImage(data: data) else {

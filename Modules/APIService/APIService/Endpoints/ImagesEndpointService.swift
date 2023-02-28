@@ -7,7 +7,6 @@
 
 import Foundation
 import Networking
-import SwiftUI
 
 public struct Cat: Decodable, Equatable {
     public let id: String
@@ -24,7 +23,7 @@ public struct CatUploadOutcome: Decodable, Equatable {
 public protocol ImagesEndpointServiceType {
     func retrieveExploreCats() async -> [Cat]
     func retrieveCat(for id: String) async -> Cat
-    @discardableResult func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome
+    @discardableResult func uploadCatData(_ data: Data, mimeType: MimeType) async -> CatUploadOutcome
     func retrieveMyCats() async -> [Cat]
     func deleteCat(_ id: String) async
 }
@@ -117,13 +116,13 @@ public class ImagesEndpointService: ImagesEndpointServiceType {
     
     // MARK: - Upload
     
-    @discardableResult public func uploadCatImage(_ image: UIImage) async -> CatUploadOutcome {
+    @discardableResult public func uploadCatData(_ data: Data, mimeType: MimeType) async -> CatUploadOutcome {
         do {
-            let outcome: CatUploadOutcome = try await networkingClient.postImage(path: "/v1/images/upload",
-                                                                                 image: image,
-                                                                                 headers: nil,
-                                                                                 decoder: JSONDecoder())
-            
+            let outcome: CatUploadOutcome = try await networkingClient.postFile(path: "/v1/images/upload",
+                                                                                data: data,
+                                                                                mimeType: mimeType,
+                                                                                headers: nil,
+                                                                                decoder: JSONDecoder())
             return outcome
         } catch let error {
             //TODO: Handle better

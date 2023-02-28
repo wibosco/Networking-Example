@@ -30,7 +30,7 @@ class ImagePickerViewModel: ObservableObject {
     
     func uploadImage(_ image: UIImage) async {
         state = .uploading
-        await dependencies.imagesService.uploadCatImage(image)
+        await dependencies.imagesService.uploadCatJPEGImage(image)
         state = .ready
     }
 }
