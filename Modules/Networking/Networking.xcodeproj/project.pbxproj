@@ -25,6 +25,7 @@
 		43AD2E5429AE2DC000D68675 /* StubDecodable.json in Resources */ = {isa = PBXBuildFile; fileRef = 43AD2E5329AE2DC000D68675 /* StubDecodable.json */; };
 		43AD2E5729AE2E1B00D68675 /* Bundle+Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AD2E5629AE2E1B00D68675 /* Bundle+Load.swift */; };
 		43AD2E5929AE413A00D68675 /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD896242983FCF100414419 /* Networking.framework */; };
+		43AD2E5E29AE547800D68675 /* NetworkingTestHelpers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439AFCFD29ACC0C700FAC260 /* NetworkingTestHelpers.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43AD2E5E29AE547800D68675 /* NetworkingTestHelpers.framework in Frameworks */,
 				3DD8962D2983FCF300414419 /* Networking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

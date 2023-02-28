@@ -64,6 +64,7 @@
 		439AFD3429AD0B4A00FAC260 /* FavouriteOutcome+TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavouriteOutcome+TestData.swift"; sourceTree = "<group>"; };
 		439AFD3629AD106700FAC260 /* AssetDownloadServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDownloadServiceTests.swift; sourceTree = "<group>"; };
 		43A6B58C29998A27001F0CC8 /* FavouritesEndpointService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesEndpointService.swift; sourceTree = "<group>"; };
+		43AD2E5C29AE546500D68675 /* NetworkingTestHelpers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NetworkingTestHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +139,7 @@
 		4373E19C299062F20021B8D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43AD2E5C29AE546500D68675 /* NetworkingTestHelpers.framework */,
 				439AFD1B29ACD32E00FAC260 /* NetworkingTestHelpers.framework */,
 				4373E19D299062F20021B8D4 /* Networking.framework */,
 			);
